@@ -71,6 +71,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Pages\RegistrPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Pages\StartPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -80,6 +84,9 @@
     <Compile Include="Models\CurrentUser.cs" />
     <Compile Include="Pages\AftorisPage.xaml.cs">
       <DependentUpon>AftorisPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\RegistrPage.xaml.cs">
+      <DependentUpon>RegistrPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\StartPage.xaml.cs">
       <DependentUpon>StartPage.xaml</DependentUpon>

@@ -9,6 +9,6 @@
       Title="StartPage">
 
     <Grid>
-        
+        <Button x:Name="Aff" Content="Авторизация" Width="100" Height="30" Click="Aff_Click"/>
     </Grid>
 </Page>

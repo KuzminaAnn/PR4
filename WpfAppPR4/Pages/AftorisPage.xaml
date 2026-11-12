@@ -13,17 +13,22 @@
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <TextBlock Text="Авторизация" FontSize="40" HorizontalAlignment="Center" Grid.Row="0" Margin="5"/>
-        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="20">
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="15">
             <TextBlock Text="Логин" FontSize="25" Margin="15, 5"/>
-            <TextBox x:Name="Login" Margin="15, 5" Width="150" Height="40" FontSize="25"/>
+            <TextBox x:Name="Login" Margin="15, 5" Width="150" Height="35" FontSize="20"/>
         </StackPanel>
-        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="20">
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="15">
             <TextBlock Text="Пароль" FontSize="25" Margin="15, 5"/>
-            <TextBox x:Name="Pasword" Margin="15, 5" Width="150" Height="40" FontSize="25"/>
+            <PasswordBox x:Name="Pasword" Margin="15, 5" Width="150" Height="35" FontSize="20"/>
         </StackPanel>
-        
+        <StackPanel Orientation="Horizontal" Grid.Row="3" HorizontalAlignment="Center" Margin="15">
+            <TextBlock Text="У вас нет аккаунта?" Margin="15, 5" FontSize="20"/>
+            <Button x:Name="Reg" Content="Регистрация" Margin="15, 5" Width="150" Height="30" FontSize="20" Click="Reg_Click"/>
+        </StackPanel>
+        <Button x:Name="Aff" Content="Авторизация" Margin="15, 5" Width="150" Height="30" FontSize="20" Grid.Row="4"/>
     </Grid>
 </Page>

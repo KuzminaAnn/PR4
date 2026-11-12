@@ -24,5 +24,10 @@ namespace WpfAppPR4.Pages
         {
             InitializeComponent();
         }
+
+        private void Reg_Click(object sender, RoutedEventArgs e)
+        {
+            NavigationService.Navigate(new RegistrPage());
+        }
     }
 }
