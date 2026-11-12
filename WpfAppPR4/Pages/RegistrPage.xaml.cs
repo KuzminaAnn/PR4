@@ -24,5 +24,10 @@ namespace WpfAppPR4.Pages
         {
             InitializeComponent();
         }
+
+        private void Exet_Click(object sender, RoutedEventArgs e)
+        {
+            NavigationService.GoBack();
+        }
     }
 }

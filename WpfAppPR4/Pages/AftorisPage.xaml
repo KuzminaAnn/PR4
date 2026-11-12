@@ -29,6 +29,6 @@
             <TextBlock Text="У вас нет аккаунта?" Margin="15, 5" FontSize="20"/>
             <Button x:Name="Reg" Content="Регистрация" Margin="15, 5" Width="150" Height="30" FontSize="20" Click="Reg_Click"/>
         </StackPanel>
-        <Button x:Name="Aff" Content="Авторизация" Margin="15, 5" Width="150" Height="30" FontSize="20" Grid.Row="4"/>
+        <Button x:Name="Aff" Content="Авторизация" Margin="15, 5" Width="150" Height="30" FontSize="20" Grid.Row="4" Click="Aff_Click"/>
     </Grid>
 </Page>
