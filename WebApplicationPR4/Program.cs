@@ -2,7 +2,7 @@ using WebApplicationPR4.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddDbContext<PR4Context>();
+builder.Services.AddDbContext<PR4Context>(); //ад
 
 var app = builder.Build();
 

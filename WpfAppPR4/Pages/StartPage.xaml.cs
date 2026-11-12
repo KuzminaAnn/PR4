@@ -24,5 +24,10 @@ namespace WpfAppPR4.Pages
         {
             InitializeComponent();
         }
+
+        private void Aff_Click(object sender, RoutedEventArgs e)
+        {
+            NavigationService.Navigate(new AftorisPage());
+        }
     }
 }
