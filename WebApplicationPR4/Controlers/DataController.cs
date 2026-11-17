@@ -5,7 +5,7 @@ using WebApplicationPR4.Models;
 namespace WebApplicationPR4.Controlers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/products")]
     public class DataController : ControllerBase
     {
         private readonly PR4Context _context;
