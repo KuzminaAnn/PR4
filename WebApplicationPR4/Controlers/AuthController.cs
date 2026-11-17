@@ -51,5 +51,50 @@ namespace WebApplicationPR4.Controllers
                 UserName = user.Name
             });
         }
+        [HttpPost("register")]
+        public async Task<IActionResult> Register([FromBody] RegisterRequestDto request)
+        {
+            if (string.IsNullOrWhiteSpace(request.Login) || string.IsNullOrWhiteSpace(request.Password))
+            {
+                return BadRequest(new AuthResponseDto
+                {
+                    Success = false,
+                    Message = "Логин и пароль обязательны"
+                });
+            }
+
+            // Проверяем, не занят ли логин
+            var existingUser = await _context.Users
+                .FirstOrDefaultAsync(u => u.Login == request.Login);
+
+            if (existingUser != null)
+            {
+                return Conflict(new AuthResponseDto
+                {
+                    Success = false,
+                    Message = "Пользователь с таким логином уже существует"
+                });
+            }
+
+            // Создаём нового пользователя
+            var newUser = new User
+            {
+                Login = request.Login,
+                Password = request.Password,
+                Name = request.Name,
+                Idrole = 2  // Роль по умолчанию — 2 (обычный пользователь)
+            };
+
+            _context.Users.Add(newUser);
+            await _context.SaveChangesAsync();
+
+            return Ok(new AuthResponseDto
+            {
+                Success = true,
+                Message = "Регистрация успешна",
+                UserId = newUser.Id,
+                UserName = newUser.Name
+            });
+        }
     }
 }
