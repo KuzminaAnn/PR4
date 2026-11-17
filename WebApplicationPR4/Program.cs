@@ -7,31 +7,48 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<PR4Context>(); //БД
 builder.Services.AddControllers();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowWpf", policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
+});
+
+builder.Services.AddControllers();
+// ... остальная конфигурация
+
 var app = builder.Build();
+
+app.UseCors("AllowWpf");
+app.MapControllers();
+app.Run();
 
 // Configure the HTTP request pipeline
 
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
+//var summaries = new[]
+//{
+//    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
+//};
 
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast = Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-});
+//app.MapGet("/weatherforecast", () =>
+//{
+//    var forecast = Enumerable.Range(1, 5).Select(index =>
+//        new WeatherForecast
+//        (
+//            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
+//            Random.Shared.Next(-20, 55),
+//            summaries[Random.Shared.Next(summaries.Length)]
+//        ))
+//        .ToArray();
+//    return forecast;
+//});
 
-app.Run();
+//app.Run();
 
-internal record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
+//internal record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
+//{
+//    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
+//}
