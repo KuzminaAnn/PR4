@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 
 using System.Threading.Tasks;
@@ -17,7 +18,5 @@ namespace WpfAppPR4.Services
                 BaseAddress = new Uri("http://localhost:5225")
             };
         }
-
-      
     }
 }
