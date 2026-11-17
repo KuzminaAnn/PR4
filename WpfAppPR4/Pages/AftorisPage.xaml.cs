@@ -39,15 +39,9 @@ namespace WpfAppPR4.Pages
         {
             string login = Login.Text.Trim();
             string password = Pasword.Password;
-
             if (string.IsNullOrWhiteSpace(login) || string.IsNullOrWhiteSpace(password))
             {
                 MessageBox.Show("Введите логин и пароль.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
-            if (string.IsNullOrWhiteSpace(login) || string.IsNullOrWhiteSpace(password))
-            {
-                MessageBox.Show("Введите логин и пароль.");
                 return;
             }
 
@@ -61,23 +55,18 @@ namespace WpfAppPR4.Pages
 
                 if (response.IsSuccessStatusCode)
                 {
-                    // УСПЕХ! Просто сохраняем логин в глобальную переменную
-                    AffUser.CurrentUser = new Userr
-                    {
-                        Login = login
-                    };
+                    AffUser.CurrentUser = new Userr { Login = login };
                     MessageBox.Show("Вы вошли в аккаунт");
-                    // Переходим дальше
                     NavigationService.Navigate(new UserrPage());
                 }
                 else
                 {
-                    MessageBox.Show("Неверный логин или пароль.");
+                    MessageBox.Show("Неверный логин или пароль.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                MessageBox.Show($"Ошибка подключения к API");
+                MessageBox.Show("Ошибка подключения к API. Запущен ли веб-проект?", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
         }
