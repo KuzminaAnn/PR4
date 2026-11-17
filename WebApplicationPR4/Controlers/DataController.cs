@@ -18,7 +18,8 @@ namespace WebApplicationPR4.Controlers
         [HttpGet("getitems")]
         public async Task<ActionResult<List<Product>>> GetItems()
         {
-            return await _context.Products.ToListAsync();
+            var products = await _context.Products.ToListAsync();
+            return Ok(products);
         }
     }
 }

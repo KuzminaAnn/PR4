@@ -11,7 +11,7 @@ namespace WpfAppPR4.Services
     public class ApiService
     {
         private readonly HttpClient _httpClient;
-        private const string BaseUrl = "http://localhost:5225/api";
+        private const string BaseUrl = "http://localhost:5225";
 
         public ApiService()
         {
@@ -22,15 +22,21 @@ namespace WpfAppPR4.Services
         {
             try
             {
-                var response = await _httpClient.GetStringAsync(
-                    $"{BaseUrl}/products/getitems");
+                var response = await _httpClient.GetAsync("/api/products/getitems");
 
-                var products = JsonConvert.DeserializeObject<List<Product>>(response);
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw new Exception($"Ошибка HTTP: {response.StatusCode}");
+                }
+
+                var content = await response.Content.ReadAsStringAsync();
+                var products = JsonConvert.DeserializeObject<List<Product>>(content);
+
                 return products ?? new List<Product>();
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Ошибка: {ex.Message}");
+                Console.WriteLine($"Ошибка при загрузке продуктов: {ex.Message}");
                 return new List<Product>();
             }
         }
