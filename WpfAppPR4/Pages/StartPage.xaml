@@ -21,7 +21,8 @@
             <TextBox x:Name="Poisc" FontSize="20" Foreground="#1F4E5F" Margin="10" Background="White" Height="30" Width="490" TextChanged="Poisc_TextChanged"/>
             <ComboBox x:Name="Filtr" FontSize="20" DisplayMemberPath="Name" Height="30" Width="150" Margin="10" HorizontalAlignment="Right" SelectionChanged="Filtr_SelectionChanged"/>
         </StackPanel>
-        <ListBox x:Name="Box" ScrollViewer.HorizontalScrollBarVisibility="Disabled" d:ItemsSource="{d:SampleData ItemCount=5}" Grid.Row="2" Background="#F4F7F7">
+        <ListBox x:Name="Box" Grid.Row="2" DisplayMemberPath="Name" />
+        <!--<ListBox x:Name="Box" ScrollViewer.HorizontalScrollBarVisibility="Disabled" d:ItemsSource="{d:SampleData ItemCount=5}" Grid.Row="2" Background="#F4F7F7">
             <ListBox.ItemTemplate >
                 <DataTemplate>
                     <StackPanel Margin="25, 15" Orientation="Vertical">
@@ -40,6 +41,6 @@
                     <WrapPanel/>
                 </ItemsPanelTemplate>
             </ListBox.ItemsPanel>
-        </ListBox>
+        </ListBox>-->
     </Grid>
 </Page>
