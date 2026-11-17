@@ -20,6 +20,7 @@
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="15">
             <TextBlock Text="Логин" FontSize="25" Margin="15, 5"/>
             <TextBox x:Name="Login" Margin="15, 5" Width="150" Height="35" FontSize="20"/>
+            <TextBlock x:Name="StatusTextBlock" Margin="15, 5" Width="150" Height="35" FontSize="20"/>
         </StackPanel>
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="15">
             <TextBlock Text="Пароль" FontSize="25" Margin="15, 5"/>
