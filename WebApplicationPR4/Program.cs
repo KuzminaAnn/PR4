@@ -1,8 +1,11 @@
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using WebApplicationPR4.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<PR4Context>(); //ад
+builder.Services.AddControllers();
 
 var app = builder.Build();
 
