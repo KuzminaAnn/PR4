@@ -13,7 +13,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Newtonsoft.Json;
 using WpfAppPR4.Models;
+using WpfAppPR4.Services;
 
 namespace WpfAppPR4.Pages
 {
@@ -22,14 +24,20 @@ namespace WpfAppPR4.Pages
     /// </summary>
     public partial class AftorisPage : Page
     {
-        private static readonly HttpClient httpClient = new HttpClient();
+        //private static readonly HttpClient httpClient = new HttpClient();
 
         public AftorisPage()
         {
             InitializeComponent();
-            httpClient.BaseAddress = new Uri("http://localhost:5225");
+            //httpClient.BaseAddress = new Uri("http://localhost:5225");
         }
 
+
+        private static readonly HttpClient httpClient = new HttpClient
+        {
+            BaseAddress = new Uri("http://localhost:5225"),
+            Timeout = TimeSpan.FromSeconds(10)
+        };
         private void Reg_Click(object sender, RoutedEventArgs e)
         {
             NavigationService.Navigate(new RegistrPage());
@@ -39,36 +47,49 @@ namespace WpfAppPR4.Pages
         {
             string login = Login.Text.Trim();
             string password = Pasword.Password;
-            if (string.IsNullOrWhiteSpace(login) || string.IsNullOrWhiteSpace(password))
+
+            if (string.IsNullOrEmpty(login) || string.IsNullOrEmpty(password))
             {
-                MessageBox.Show("Введите логин и пароль.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
+                StatusTextBlock.Text = "Заполните все поля!";
                 return;
             }
 
-            // Формируем JSON
-            var json = "{\"Login\":\"" + login + "\",\"Password\":\"" + password + "\"}";
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
+            Login.IsEnabled = false;
+            StatusTextBlock.Text = "Проверка...";
 
             try
             {
-                var response = await httpClient.PostAsync("/api/auth/login", content);
+                // Формируем URL с параметрами
+                var requestUri = $"/api/auth/login?login={Uri.EscapeDataString(login)}&password={Uri.EscapeDataString(password)}";
 
-                if (response.IsSuccessStatusCode)
+                // Отправляем GET-запрос
+                var response = await httpClient.GetAsync(requestUri);
+                var content = await response.Content.ReadAsStringAsync();
+
+                // Парсим JSON через Newtonsoft.Json
+                var result = JsonConvert.DeserializeObject<AuthResponseDto>(content);
+
+                Login.IsEnabled = true;
+                StatusTextBlock.Text = "";
+
+                if (result != null && result.Success)
                 {
-                    AffUser.CurrentUser = new Userr { Login = login };
-                    MessageBox.Show("Вы вошли в аккаунт");
+                    MessageBox.Show($"Добро пожаловать, {result.UserName}!", "Успех",
+                        MessageBoxButton.OK, MessageBoxImage.Information);
                     NavigationService.Navigate(new UserrPage());
+                    App.Current.Properties["UserId"] = result.UserId;
+                    App.Current.Properties["UserName"] = result.UserName;
                 }
                 else
                 {
-                    MessageBox.Show("Неверный логин или пароль.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                    StatusTextBlock.Text = result?.Message ?? "Неизвестная ошибка";
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                MessageBox.Show("Ошибка подключения к API. Запущен ли веб-проект?", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                Login.IsEnabled = true;
+                StatusTextBlock.Text = "Ошибка сети: " + ex.Message;
             }
-
         }
     }
 }

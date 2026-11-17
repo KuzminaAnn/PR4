@@ -32,8 +32,7 @@ namespace WebApplicationPR4.Controllers
 
             // Ищем пользователя в таблице Users по Login и Password
             // EF Core сам переведёт это в SQL-запрос
-            var user = await _context.Users
-                .FirstOrDefaultAsync(u => u.Login == request.Login && u.Password == request.Password);
+            var user = await _context.Users.FirstOrDefaultAsync(u =>u.Login.Trim() == request.Login.Trim() && u.Password.Trim() == request.Password.Trim());
 
             if (user == null)
             {
