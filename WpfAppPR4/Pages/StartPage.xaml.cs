@@ -29,5 +29,21 @@ namespace WpfAppPR4.Pages
         {
             NavigationService.Navigate(new AftorisPage());
         }
+        private void Sort_SelectionChanged(object sender, RoutedEventArgs e)
+        {
+            
+        }
+        private void Poisc_TextChanged(object sender, RoutedEventArgs e)
+        {
+
+        }
+        private void Filtr_SelectionChanged(object sender, RoutedEventArgs e)
+        {
+
+        }
+        private void Podrob_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
