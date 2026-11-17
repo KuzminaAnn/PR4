@@ -55,6 +55,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Services\ApiService.cs" />
     <Page Include="Dictionary.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -90,6 +91,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\AffUser.cs" />
+    <Compile Include="Models\AuthResponseDto.cs" />
     <Compile Include="Models\CurrentUser.cs" />
     <Compile Include="Models\Userr.cs" />
     <Compile Include="Pages\AftorisPage.xaml.cs">
