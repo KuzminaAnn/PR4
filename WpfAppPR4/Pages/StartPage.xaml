@@ -9,6 +9,45 @@
       Title="StartPage">
 
     <Grid>
-        <Button x:Name="Aff" Content="Авторизация" Width="100" Height="30" Click="Aff_Click"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <TextBlock Text="Магазин" FontSize="40" Grid.Row="0" HorizontalAlignment="Center"/>
+        <Button Grid.Row="0" x:Name="Aff" Content="Авторизация" Width="100" Height="30" Click="Aff_Click" HorizontalAlignment="Right"/>
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
+            <ComboBox x:Name="Sort" Height="30" Width="150" Margin="10" HorizontalAlignment="Left" SelectionChanged="Sort_SelectionChanged" FontSize="20"/>
+            <TextBox x:Name="Poisc" FontSize="20" Foreground="#1F4E5F" Margin="10" Background="White" Height="30" Width="490" TextChanged="Poisc_TextChanged"/>
+            <ComboBox x:Name="Filtr" FontSize="20" DisplayMemberPath="Name" Height="30" Width="150" Margin="10" HorizontalAlignment="Right" SelectionChanged="Filtr_SelectionChanged"/>
+        </StackPanel>
+        <ListBox x:Name="Box" ScrollViewer.HorizontalScrollBarVisibility="Disabled" d:ItemsSource="{d:SampleData ItemCount=5}" Grid.Row="2" Background="#F4F7F7">
+            <ListBox.ItemTemplate >
+                <DataTemplate>
+                    <StackPanel Margin="25, 15" Orientation="Vertical">
+                        <Image Height="300" Width="250" Source="{Binding Image}"/>
+                        <StackPanel Margin="5" HorizontalAlignment="Center" Width="250">
+                            <TextBlock TextWrapping="NoWrap" Text="{Binding Name}" FontSize="20"/>
+                            <TextBlock TextWrapping="Wrap" Text="{Binding User.Name}" FontSize="15"/>
+                            <TextBlock TextWrapping="Wrap" Text="{Binding Rating}" FontSize="15"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Button x:Name="Podrob" Content="Подробнее" Width="130" Height="40" FontSize="20" Click="Podrob_Click" Margin="5"/>
+                            <ComboBox Width="130" Height="40">
+                                <Button x:Name="Plan" Content="В планах" Width="130" Height="40" FontSize="20" Click="Plan_Click"/>
+                                <Button x:Name="Bros" Content="Заброшено" Width="130" Height="40" FontSize="20" Click="Bros_Click"/>
+                                <Button x:Name="Read" Content="Читаю" Width="130" Height="40" FontSize="20" Click="Read_Click"/>
+                                <Button x:Name="Ok" Content="Прочитано" Width="130" Height="40" FontSize="20" Click="Ok_Click"/>
+                            </ComboBox>
+                        </StackPanel>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel/>
+                </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
+        </ListBox>
     </Grid>
 </Page>
