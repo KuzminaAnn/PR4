@@ -58,6 +58,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Models\Product.cs" />
     <Compile Include="Services\ApiService.cs" />
     <Page Include="Dictionary.xaml">
       <SubType>Designer</SubType>
