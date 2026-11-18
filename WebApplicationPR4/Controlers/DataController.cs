@@ -5,7 +5,7 @@ using WebApplicationPR4.Models;
 namespace WebApplicationPR4.Controlers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/products")]
     public class DataController : ControllerBase
     {
         private readonly PR4Context _context;
@@ -18,7 +18,8 @@ namespace WebApplicationPR4.Controlers
         [HttpGet("getitems")]
         public async Task<ActionResult<List<Product>>> GetItems()
         {
-            return await _context.Products.ToListAsync();
+            var products = await _context.Products.Where(p => p.Quantity > 0 || !p.IsOver).ToListAsync();
+            return Ok(products);
         }
     }
 }

@@ -30,10 +30,18 @@ namespace WpfAppPR4.Pages
             // Загружаем данные при старте
             Loaded += async (s, e) => await LoadProducts();
         }
+        // MainWindow.xaml.cs
         private async Task LoadProducts()
         {
-            var products = await _apiService.GetProductsAsync();
-            Box.ItemsSource = products;
+            try
+            {
+                var products = await _apiService.GetProductsAsync();
+                Box.ItemsSource = products;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка загрузки: {ex.Message}");
+            }
         }
         private void Aff_Click(object sender, RoutedEventArgs e)
         {
