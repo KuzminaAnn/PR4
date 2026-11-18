@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+//алё работать будем сегодня или как???
 namespace WpfAppPR4.Models
 {
     public class Product
