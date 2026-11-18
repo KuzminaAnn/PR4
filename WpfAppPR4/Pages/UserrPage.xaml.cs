@@ -27,7 +27,7 @@ namespace WpfAppPR4.Pages
 
             if (AffUser.CurrentUser != null)
             {
-                Name.Text = "Привет, " + AffUser.CurrentUser.Login + "!";
+                Nameeee.Text = AffUser.CurrentUser.Name;
             }
         }
 

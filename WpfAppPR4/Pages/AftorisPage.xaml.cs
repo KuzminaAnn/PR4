@@ -74,6 +74,12 @@ namespace WpfAppPR4.Pages
 
                 if (result != null && result.Success)
                 {
+                    AffUser.CurrentUser = new Userr
+                    {
+                        Id = result.UserId,
+                        Name = result.UserName,
+                        Login = login  // переменная login из поля ввода
+                    };
                     MessageBox.Show($"Добро пожаловать, {result.UserName}!", "Успех",
                         MessageBoxButton.OK, MessageBoxImage.Information);
                     NavigationService.Navigate(new UserrPage());
