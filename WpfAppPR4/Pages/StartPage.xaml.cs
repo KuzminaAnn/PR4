@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using WpfAppPR4.Services;
 
 namespace WpfAppPR4.Pages
 {
@@ -20,11 +21,28 @@ namespace WpfAppPR4.Pages
     /// </summary>
     public partial class StartPage : Page
     {
+        private readonly ApiService _apiService;
         public StartPage()
         {
             InitializeComponent();
-        }
+            _apiService = new ApiService();
 
+            // Загружаем данные при старте
+            Loaded += async (s, e) => await LoadProducts();
+        }
+        // MainWindow.xaml.cs
+        private async Task LoadProducts()
+        {
+            try
+            {
+                var products = await _apiService.GetProductsAsync();
+                Box.ItemsSource = products;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка загрузки: {ex.Message}");
+            }
+        }
         private void Aff_Click(object sender, RoutedEventArgs e)
         {
             NavigationService.Navigate(new AftorisPage());

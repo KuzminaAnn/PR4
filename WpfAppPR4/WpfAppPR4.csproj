@@ -58,6 +58,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Models\Product.cs" />
     <Compile Include="Services\ApiService.cs" />
     <Page Include="Dictionary.xaml">
       <SubType>Designer</SubType>
@@ -136,10 +137,20 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\catalog.jpg" />
+    <Folder Include="Winwin\" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Winwin\" />
+    <Resource Include="Images\1.jpg" />
+    <Resource Include="Images\2.jpg" />
+    <Resource Include="Images\3.jpeg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\4.jpg" />
+    <Resource Include="Images\5.jpg" />
+    <Resource Include="Images\6.jpg" />
+    <Resource Include="Images\7.jpg" />
+    <Resource Include="Images\8.jpg" />
+    <Resource Include="Images\9.jpeg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
