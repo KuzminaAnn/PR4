@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Security.Cryptography;
+using System.Text;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebApplicationPR4.DTO;
 using WebApplicationPR4.Models; // namespace, где лежит PR4Context и User
@@ -17,6 +19,17 @@ namespace WebApplicationPR4.Controllers
             _context = context;
         }
 
+        public static string GetHash(string password)
+        {
+            using (var hash = SHA1.Create())
+            {
+                return string.Concat(
+                    hash.ComputeHash(Encoding.UTF8.GetBytes(password))
+                        .Select(x => x.ToString("X2"))
+                );
+            }
+        }
+
         // GET: api/auth/login?login=...&password=...
         [HttpGet("login")]
         public async Task<IActionResult> Login([FromQuery] LoginRequestDTO request)
@@ -29,10 +42,10 @@ namespace WebApplicationPR4.Controllers
                     Message = "Введите логин и пароль"
                 });
             }
-
+            string hashedPassword = GetHash(request.Password);
             // Ищем пользователя в таблице Users по Login и Password
             // EF Core сам переведёт это в SQL-запрос
-            var user = await _context.Users.FirstOrDefaultAsync(u =>u.Login.Trim() == request.Login.Trim() && u.Password.Trim() == request.Password.Trim());
+            var user = await _context.Users.FirstOrDefaultAsync(u =>u.Login.Trim() == request.Login.Trim() && u.Password.Trim() == hashedPassword.Trim());
 
             if (user == null)
             {
@@ -75,12 +88,12 @@ namespace WebApplicationPR4.Controllers
                     Message = "Пользователь с таким логином уже существует"
                 });
             }
-
+            string hashedPassword = GetHash(request.Password);
             // Создаём нового пользователя
             var newUser = new User
             {
                 Login = request.Login,
-                Password = request.Password,
+                Password = hashedPassword,
                 Name = request.Name,
                 Idrole = 2  // Роль по умолчанию — 2 (обычный пользователь)
             };
