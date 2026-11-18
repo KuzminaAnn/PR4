@@ -45,7 +45,7 @@ public partial class PR4Context : DbContext
     {
         if (!optionsBuilder.IsConfigured)
         {
-           optionsBuilder.UseSqlServer("Server=RICK\\ANNZIMI;Database=PR4;Trusted_Connection=True;TrustServerCertificate=True;");
+           optionsBuilder.UseSqlServer("Server=LAPTOP-O9OUC25J\\MSSQLSERVER01;Database=PR4;Trusted_Connection=True;TrustServerCertificate=True;");
         }
     }
 
