@@ -103,7 +103,6 @@
   <ItemGroup>
     <Compile Include="Models\AffUser.cs" />
     <Compile Include="Models\AuthResponseDto.cs" />
-    <Compile Include="Models\CurrentUser.cs" />
     <Compile Include="Models\Userr.cs" />
     <Compile Include="Pages\AftorisPage.xaml.cs">
       <DependentUpon>AftorisPage.xaml</DependentUpon>
