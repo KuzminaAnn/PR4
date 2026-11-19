@@ -81,7 +81,14 @@ namespace WpfAppPR4.Pages
 
         private void Acc_Click(object sender, RoutedEventArgs e)
         {
-            NavigationService.Navigate(new UserrPage());
+            if (AffUser.CurrentUser.Idrole == 1)
+            {
+                NavigationService.Navigate(new AdminPage());
+            }
+            else if (AffUser.CurrentUser.Idrole == 2)
+            {
+                NavigationService.Navigate(new UserrPage());
+            }            
         }
     }
 }

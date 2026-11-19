@@ -9,6 +9,58 @@
       Title="UserrPage">
 
     <Grid>
-        <TextBlock x:Name="Name" FontSize="20"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Row="0" x:Name="Name" FontSize="25" HorizontalAlignment="Center"/>
+        <TabControl x:Name="Acc" Grid.Row="1" Width="750" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5">
+            <TabItem Name="info" Header="Инфо" FontSize="15" Height="40" Width="100">
+                <StackPanel>
+                    <TextBlock Text="Имя:" FontSize="20" Margin="5"/>
+                    <TextBox x:Name="name" Height="25" Margin="5" IsReadOnly="True"/>
+                    <TextBlock Text="Логин:" FontSize="20" Margin="5"/>
+                    <TextBox x:Name="login" Height="25" Margin="5" IsReadOnly="True"/>
+                </StackPanel>
+            </TabItem>
+            <TabItem Name="rew" Header="Отзывы" FontSize="15" Height="40" Width="100">
+                <ListBox x:Name="Rewie" Width="750" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Visible" Grid.Row="4" d:ItemsSource="{d:SampleData ItemCount=5}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Width="800">
+                                <TextBlock Text="{Binding Users.Name}" Margin="5"/>
+                                <TextBlock Text="{Binding Rating}" Margin="5"/>
+                                <TextBlock Text="{Binding Text}" Margin="5" TextWrapping="Wrap"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                    <ListBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel/>
+                        </ItemsPanelTemplate>
+                    </ListBox.ItemsPanel>
+                </ListBox>
+            </TabItem>
+            <TabItem Name="love" Header="Избранное" FontSize="15" Height="40" Width="100">
+                    <ListBox x:Name="LOVE" Width="750" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Visible" Grid.Row="4" d:ItemsSource="{d:SampleData ItemCount=5}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Width="800">
+                                    <TextBlock Text="{Binding Name}" Margin="5"/>
+                                    <TextBlock Text="{Binding Rating}" Margin="5"/>
+                                    <TextBlock Text="{Binding Price}" Margin="5" TextWrapping="Wrap"/>
+                                    <Button x:Name="basket" Content="В корзину" HorizontalAlignment="Left" Click="basket_Click" Margin="5"/>
+                            </StackPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                        <ListBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel/>
+                            </ItemsPanelTemplate>
+                        </ListBox.ItemsPanel>
+                    </ListBox>
+                </TabItem>
+        </TabControl>
     </Grid>
 </Page>
