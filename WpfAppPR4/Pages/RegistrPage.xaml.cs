@@ -80,7 +80,8 @@ namespace WpfAppPR4.Pages
                     {
                         Id = result.UserId,
                         Name = result.UserName,
-                        Login = login  // переменная login из поля ввода
+                        Login = login,  // переменная login из поля ввода
+                        Idrole = result.Idrole
                     };
                     MessageBox.Show($"Регистрация успешна! Добро пожаловать, {result.UserName}!",
                         "Успех", MessageBoxButton.OK, MessageBoxImage.Information);

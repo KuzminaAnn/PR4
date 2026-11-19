@@ -78,11 +78,17 @@ namespace WpfAppPR4.Pages
                     {
                         Id = result.UserId,
                         Name = result.UserName,
-                        Login = login  // переменная login из поля ввода
+                        Login = login, // переменная login из поля ввода
+                        Idrole = result.Idrole
                     };
                     MessageBox.Show($"Добро пожаловать, {result.UserName}!", "Успех",
                         MessageBoxButton.OK, MessageBoxImage.Information);
-                    NavigationService.Navigate(new UserrPage());
+                    if (AffUser.CurrentUser.Idrole == 1)
+                    {
+                        NavigationService.Navigate(new AdminPage());
+                    }
+                    else
+                        NavigationService.Navigate(new UserrPage());
                     App.Current.Properties["UserId"] = result.UserId;
                     App.Current.Properties["UserName"] = result.UserName;
                 }
