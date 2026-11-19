@@ -9,6 +9,6 @@
       Title="UserrPage">
 
     <Grid>
-        <TextBlock x:Name="Nameeee" FontSize="20"/>
+        <TextBlock x:Name="Name" FontSize="20"/>
     </Grid>
 </Page>

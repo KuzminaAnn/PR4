@@ -33,22 +33,22 @@ namespace WpfAppPR4.Pages
             DescText.Text = product.Description;
             PriceText.Text = $"{product.Price} руб.";
             RatingText.Text = product.Rating.ToString("F1");
-
-            // Обработка картинки (пока просто путь, если он корректный)
-            if (!string.IsNullOrEmpty(product.Image) && product.Image != "\\\\")
-            {
-                // Если картинка лежит локально в папке Images проекта:
-                // GameImage.Source = new BitmapImage(new Uri($"pack://application:,,,/Images/{System.IO.Path.GetFileName(product.Image)}"));
-
-                // Или если это полный путь/URL:
-                try
-                {
-                    GameImage.Source = new System.Windows.Media.Imaging.BitmapImage(new Uri(product.Image, UriKind.RelativeOrAbsolute));
-                }
-                catch { }
-            }
+            GameImage.Source = new System.Windows.Media.Imaging.BitmapImage(new Uri(product.Image, UriKind.RelativeOrAbsolute));
         }
 
-  
+        private void Back_Click(object sender, RoutedEventArgs e)
+        {
+            NavigationService.Navigate(new StartPage());
+        }
+
+        private void Love_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Order_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
