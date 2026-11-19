@@ -27,9 +27,14 @@ namespace WpfAppPR4.Pages
 
             if (AffUser.CurrentUser != null)
             {
-                Nameeee.Text = AffUser.CurrentUser.Name;
+                Name.Text = $"Здравствуй, {AffUser.CurrentUser.Name}!";
+
             }
         }
 
+        private void basket_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

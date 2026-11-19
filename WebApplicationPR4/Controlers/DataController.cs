@@ -18,7 +18,7 @@ namespace WebApplicationPR4.Controlers
         [HttpGet("getitems")]
         public async Task<ActionResult<List<Product>>> GetItems()
         {
-            var products = await _context.Products.Where(p => p.Quantity > 0 || !p.IsOver).ToListAsync();
+            var products = await _context.Products.Where(p => p.Quantity > 0 && !p.IsOver).ToListAsync();
             return Ok(products);
         }
     }

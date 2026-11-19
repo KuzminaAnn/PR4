@@ -60,8 +60,11 @@
     </ApplicationDefinition>
     <Compile Include="Models\AdminDto.cs" />
     <Compile Include="Models\Product.cs" />
-    <Compile Include="Pages\AdminPage.xaml.cs">
-      <DependentUpon>AdminPage.xaml</DependentUpon>
+    <Compile Include="Pages\BasketPage.xaml.cs">
+      <DependentUpon>BasketPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\GamePage.xaml.cs">
+      <DependentUpon>GamePage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\EditProductPage.xaml.cs">
       <DependentUpon>EditProductPage.xaml</DependentUpon>
@@ -91,6 +94,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Pages\BasketPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\GamePage.xaml">
     <Page Include="Pages\EditProductPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -111,7 +119,6 @@
   <ItemGroup>
     <Compile Include="Models\AffUser.cs" />
     <Compile Include="Models\AuthResponseDto.cs" />
-    <Compile Include="Models\CurrentUser.cs" />
     <Compile Include="Models\Userr.cs" />
     <Compile Include="Pages\AftorisPage.xaml.cs">
       <DependentUpon>AftorisPage.xaml</DependentUpon>
