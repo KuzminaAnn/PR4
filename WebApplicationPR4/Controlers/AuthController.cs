@@ -61,7 +61,8 @@ namespace WebApplicationPR4.Controllers
                 Success = true,
                 Message = "Авторизация успешна",
                 UserId = user.Id,
-                UserName = user.Name
+                UserName = user.Name,
+                Idrole = user.Idrole
             });
         }
         [HttpPost("register")]
@@ -106,7 +107,8 @@ namespace WebApplicationPR4.Controllers
                 Success = true,
                 Message = "Регистрация успешна",
                 UserId = newUser.Id,
-                UserName = newUser.Name
+                UserName = newUser.Name,
+                Idrole = newUser.Idrole
             });
         }
     }
