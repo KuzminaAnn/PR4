@@ -73,11 +73,9 @@ namespace WpfAppPR4.Pages
 
             if (selectedGame != null)
             {
-                var detailsWindow = new GamePage();
-
-                detailsWindow.SetProduct(selectedGame);
-
-                detailsWindow.NavigationService.Navigate(new GamePage());
+                var page = new WpfAppPR4.Pages.GamePage();
+                page.SetProduct(selectedGame);
+                this.NavigationService.Navigate(page);
             }
         }
 

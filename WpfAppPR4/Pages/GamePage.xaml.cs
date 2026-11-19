@@ -28,7 +28,7 @@ namespace WpfAppPR4.Pages
         public void SetProduct(Product product)
         {
             if (product == null) return;
-
+            
             TitleText.Text = product.Name;
             DescText.Text = product.Description;
             PriceText.Text = $"{product.Price} руб.";
@@ -49,9 +49,6 @@ namespace WpfAppPR4.Pages
             }
         }
 
-        private void Close_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
+  
     }
 }
