@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using WpfAppPR4.Services;
+using WpfAppPR4.Models;
 
 namespace WpfAppPR4.Pages
 {
@@ -26,11 +27,17 @@ namespace WpfAppPR4.Pages
         {
             InitializeComponent();
             _apiService = new ApiService();
-
-            // Загружаем данные при старте
             Loaded += async (s, e) => await LoadProducts();
+            if (AffUser.CurrentUser == null)
+            {
+                Aff.Visibility = Visibility.Visible;
+                Acc.Visibility = Visibility.Collapsed;
+            }
+            else {
+                Aff.Visibility = Visibility.Collapsed;
+                Acc.Visibility = Visibility.Visible;
+            }
         }
-        // MainWindow.xaml.cs
         private async Task LoadProducts()
         {
             try
@@ -61,7 +68,22 @@ namespace WpfAppPR4.Pages
         }
         private void Podrob_Click(object sender, RoutedEventArgs e)
         {
+            Button btn = sender as Button;
+            var selectedGame = btn?.DataContext as Product;
 
+            if (selectedGame != null)
+            {
+                var detailsWindow = new GamePage();
+
+                detailsWindow.SetProduct(selectedGame);
+
+                detailsWindow.NavigationService.Navigate(new GamePage());
+            }
+        }
+
+        private void Acc_Click(object sender, RoutedEventArgs e)
+        {
+            NavigationService.Navigate(new UserrPage());
         }
     }
 }
