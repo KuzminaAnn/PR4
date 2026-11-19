@@ -58,12 +58,16 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Models\AdminDto.cs" />
     <Compile Include="Models\Product.cs" />
     <Compile Include="Pages\BasketPage.xaml.cs">
       <DependentUpon>BasketPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\GamePage.xaml.cs">
       <DependentUpon>GamePage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\EditProductPage.xaml.cs">
+      <DependentUpon>EditProductPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Services\ApiService.cs" />
     <Page Include="Dictionary.xaml">
@@ -95,6 +99,7 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\GamePage.xaml">
+    <Page Include="Pages\EditProductPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
