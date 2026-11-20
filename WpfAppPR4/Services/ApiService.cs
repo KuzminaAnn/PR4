@@ -1,9 +1,10 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
+using System.Windows.Controls;
 using WpfAppPR4.Models;
 
 
@@ -79,6 +80,32 @@ namespace WpfAppPR4.Services
             catch (Exception ex)
             {
                 return new AuthResponseDto { Success = false, Message = "Ошибка: " + ex.Message };
+            }
+        }
+        // WpfAppPR4/Services/ApiService.cs
+
+        public async Task<List<Review>> GetUserReviewsAsync(int userId)
+        {
+            try
+            {
+                // Обрати внимание на путь: /api/r/user-reviews/... 
+                // (так как контроллер называется RController и Route api/[controller])
+                var response = await _httpClient.GetAsync($"/api/r/user-reviews/{userId}");
+
+                if (!response.IsSuccessStatusCode)
+                    return new List<Review>();
+
+                var content = await response.Content.ReadAsStringAsync();
+
+                // Теперь JsonConvert знает, что такое Review, благодаря using WpfAppPR4.Models;
+                var reviews = JsonConvert.DeserializeObject<List<Review>>(content);
+
+                return reviews ?? new List<Review>();
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Ошибка загрузки отзывов: {ex.Message}");
+                return new List<Review>();
             }
         }
     }

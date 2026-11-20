@@ -17,9 +17,9 @@
         <TextBlock Text="Играй и не теряй" FontSize="40" Grid.Row="0" HorizontalAlignment="Center"/>
         <Button Grid.Row="0" x:Name="Aff" Content="Авторизация" Visibility="Visible" Width="100" Height="30" Click="Aff_Click" HorizontalAlignment="Right"/>
         <Button Grid.Row="0" x:Name="Acc" Content="Аккаунт" Visibility="Collapsed" Width="100" Height="30" Click="Acc_Click" HorizontalAlignment="Right"/>
-        <StackPanel Grid.Row="1" Orientation="Horizontal">
-            <TextBlock Text="Сортировка:" VerticalAlignment="Center"/>
-            <ComboBox x:Name="Sort" Height="30" Width="150" Margin="10" HorizontalAlignment="Left" SelectionChanged="Sort_SelectionChanged" FontSize="20"/>
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
+            <TextBlock Text="Сортировка:" VerticalAlignment="Center" />
+            <ComboBox x:Name="Sort" Height="30" Width="150" Margin="10"  SelectionChanged="Sort_SelectionChanged" FontSize="20"/>
             <TextBlock Text="Поиск:" VerticalAlignment="Center"/>
             <TextBox x:Name="Poisc" FontSize="20" Foreground="#1F4E5F" Margin="10" Background="White" Height="30" Width="490" TextChanged="Poisc_TextChanged"/>
             <TextBlock Text="Фильтрация:" VerticalAlignment="Center"/>

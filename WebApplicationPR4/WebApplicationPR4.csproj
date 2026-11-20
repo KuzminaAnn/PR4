@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <None Include="efpt.config.json.user" />
+    <None Include="WpfAppPR4.sln" />
   </ItemGroup>
 
   <ItemGroup>
