@@ -9,34 +9,33 @@
       Title="AdminPage">
 
     <Grid>
-        <Grid Margin="20">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
 
-            <TextBlock Grid.Row="0" Text="Список товаров" FontSize="20" FontWeight="Bold" Margin="0,0,0,10"/>
+        <TextBlock Grid.Row="0" Text="Список товаров" FontSize="25" Margin="10" HorizontalAlignment="Center"/>
+        <DataGrid x:Name="ProductsDataGrid" Grid.Row="1" AutoGenerateColumns="False" IsReadOnly="True" SelectionMode="Single"  FontSize="15">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="50"/>
+                <DataGridTextColumn Header="Название" Binding="{Binding Name}" Width="*"/>
+                <DataGridTextColumn Header="Категория" Binding="{Binding CategoryName}" Width="150"/>
+                <DataGridTextColumn Header="Цена" Binding="{Binding Price}" Width="80"/>
+                <DataGridTextColumn Header="На складе" Binding="{Binding Quantity}" Width="80"/>
+                <DataGridTextColumn Header="Доступен" Binding="{Binding AvailabilityText}" Width="100"/>
+            </DataGrid.Columns>
+        </DataGrid>
 
-            <DataGrid x:Name="ProductsDataGrid" Grid.Row="1" AutoGenerateColumns="False" 
-                  IsReadOnly="True" SelectionMode="Single" Margin="0,0,0,10">
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="50"/>
-                    <DataGridTextColumn Header="Название" Binding="{Binding Name}" Width="*"/>
-                    <DataGridTextColumn Header="Категория" Binding="{Binding CategoryName}" Width="150"/>
-                    <DataGridTextColumn Header="Цена" Binding="{Binding Price}" Width="80"/>
-                    <DataGridTextColumn Header="На складе" Binding="{Binding Quantity}" Width="80"/>
-                    <!-- Используем вычисляемое свойство из DTO, чтобы не писать конвертеры -->
-                    <DataGridTextColumn Header="Доступен" Binding="{Binding AvailabilityText}" Width="100"/>
-                </DataGrid.Columns>
-            </DataGrid>
-
-            <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
-                <Button Content="Добавить" Width="120" Height="35" Margin="5" Click="AddButton_Click"/>
-                <Button Content="Редактировать" Width="120" Height="35" Margin="5" Click="EditButton_Click"/>
-                <Button Content="Удалить" Width="120" Height="35" Margin="5" Background="LightCoral" Click="DeleteButton_Click"/>
-                <Button Content="Назад" Width="120" Height="35" Margin="5" Click="BackButton_Click"/>
-            </StackPanel>
-        </Grid>
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button Content="Добавить" Width="140" Height="35" Margin="5, 10" Click="AddButton_Click" FontSize="20"/>
+            <Button Content="Редактировать" Width="140" Height="35" Margin="5, 10" Click="EditButton_Click" FontSize="20"/>
+            <Button Content="Удалить" Width="140" Height="35" Margin="5, 10" Click="DeleteButton_Click" FontSize="20"/>
+            <Button Content="Назад" Width="140" Height="35" Margin="5, 10" Click="BackButton_Click" FontSize="20"/>
+        </StackPanel>
+        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button Content="Редактировать категории" Width="250" Height="35" Margin="5, 10" FontSize="20" Click="Button_Click"/>
+        </StackPanel>
     </Grid>
 </Page>
