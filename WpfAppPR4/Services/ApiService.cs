@@ -108,13 +108,38 @@ namespace WpfAppPR4.Services
                 return new List<Review>();
             }
         }
-        public async Task<List<FavoriteGame>> GetFavoriteGamesAsync()
+        public async Task<List<FavoriteGame>> GetFavoriteGamesAsync(int userId)
         {
-            var response = await _httpClient.GetAsync("api/FavoriteGame");
+            // Передаем userId прямо в адрес запроса
+            var response = await _httpClient.GetAsync($"api/FavoriteGame/{userId}");
             response.EnsureSuccessStatusCode();
-
             var json = await response.Content.ReadAsStringAsync();
             return JsonConvert.DeserializeObject<List<FavoriteGame>>(json);
+        }
+
+        public async Task<bool> DeleteFavoriteAsync(int userId, int productId)
+        {
+            try
+            {
+                // Формируем URL: api/FavoriteGame/{userId}/{productId}
+                var url = $"api/FavoriteGame/{userId}/{productId}";
+
+                var response = await _httpClient.DeleteAsync(url);
+
+                // Для отладки: если не 200 OK, выводим статус
+                if (!response.IsSuccessStatusCode)
+                {
+                    var content = await response.Content.ReadAsStringAsync();
+                    System.Diagnostics.Debug.WriteLine($"API Error ({response.StatusCode}): {content}");
+                }
+
+                return response.IsSuccessStatusCode;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Network Error: {ex.Message}");
+                return false;
+            }
         }
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -24,11 +25,13 @@ namespace WpfAppPR4.Pages
     public partial class UserrPage : Page
     {
         private readonly ApiService _apiService;
+        private int _currentUserId;
         public UserrPage()
         {
             InitializeComponent();
             _apiService = new ApiService();
             Loaded += async (s, e) => await LoadUserReviews();
+            _currentUserId = AffUser.CurrentUser.Id;
             if (_apiService._httpClient != null)
             {
                 _apiService._httpClient.BaseAddress = new Uri("http://localhost:5225");
@@ -71,30 +74,59 @@ namespace WpfAppPR4.Pages
         {
             try
             {
-                Debug.WriteLine("Начало загрузки избранного...");
+                // Передаем userId в метод API
+                var favorites = await _apiService.GetFavoriteGamesAsync(_currentUserId);
+                LOVE.ItemsSource = favorites;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка загрузки: {ex.Message}");
+            }
+        }
 
-                var favorites = await _apiService.GetFavoriteGamesAsync();
+        private async void delete_Click(object sender, RoutedEventArgs e)
+        {
+            var button = sender as Button;
+            if (button == null) return;
 
-                Debug.WriteLine($"Получено элементов: {favorites?.Count ?? 0}");
+            var game = button.CommandParameter as FavoriteGame;
 
-                if (favorites != null && favorites.Count > 0)
+            // ПРОВЕРКА: Убедитесь, что у нас есть и ID товара, и ID пользователя
+            if (game == null || game.Id <= 0)
+            {
+                MessageBox.Show("Ошибка: Неверные данные товара.");
+                return;
+            }
+
+            if (_currentUserId <= 0)
+            {
+                MessageBox.Show("Ошибка: Пользователь не авторизован (ID = 0).");
+                return;
+            }
+
+            try
+            {
+                bool isDeleted = await _apiService.DeleteFavoriteAsync(_currentUserId, game.Id);
+
+                if (isDeleted)
                 {
-                    foreach (var item in favorites)
+                    var list =  LOVE.ItemsSource as List<FavoriteGame>;
+                    if (list != null)
                     {
-                        Debug.WriteLine($"Товар: {item.Name}, Цена: {item.Price}");
+                        list.Remove(game);
+                        LOVE.ItemsSource = null;
+                        LOVE.ItemsSource = list;
                     }
-
-                    LOVE.ItemsSource = favorites;
+                    MessageBox.Show("Товар убран из избранного.");
                 }
                 else
                 {
-                    MessageBox.Show("Список избранного пуст или API вернул null.");
+                    MessageBox.Show("Не удалось удалить товар. Проверьте консоль вывода (Output) для деталей.");
                 }
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Ошибка: {ex.Message}");
-                MessageBox.Show($"Ошибка загрузки: {ex.Message}\n{ex.InnerException?.Message}");
+                MessageBox.Show($"Исключение: {ex.Message}");
             }
         }
     }

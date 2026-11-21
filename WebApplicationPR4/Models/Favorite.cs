@@ -12,9 +12,6 @@ public partial class Favorite
     public int Iduser { get; set; }
 
     public int Idproduct { get; set; }
-    public string Name { get; set; }
-    public double Rating { get; set; }
-    public decimal Price { get; set; }
 
     public virtual Product IdproductNavigation { get; set; }
 
