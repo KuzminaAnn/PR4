@@ -12,7 +12,7 @@ namespace WpfAppPR4.Services
 {
     public class ApiService
     {
-        private readonly HttpClient _httpClient;
+        public readonly HttpClient _httpClient;
         private const string BaseUrl = "http://localhost:5225";
 
         public ApiService()
@@ -107,6 +107,14 @@ namespace WpfAppPR4.Services
                 System.Diagnostics.Debug.WriteLine($"Ошибка загрузки отзывов: {ex.Message}");
                 return new List<Review>();
             }
+        }
+        public async Task<List<FavoriteGame>> GetFavoriteGamesAsync()
+        {
+            var response = await _httpClient.GetAsync("api/FavoriteGame");
+            response.EnsureSuccessStatusCode();
+
+            var json = await response.Content.ReadAsStringAsync();
+            return JsonConvert.DeserializeObject<List<FavoriteGame>>(json);
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -28,6 +29,12 @@ namespace WpfAppPR4.Pages
             InitializeComponent();
             _apiService = new ApiService();
             Loaded += async (s, e) => await LoadUserReviews();
+            if (_apiService._httpClient != null)
+            {
+                _apiService._httpClient.BaseAddress = new Uri("http://localhost:5225");
+            }
+
+            LoadFavorites();
 
             if (AffUser.CurrentUser != null)
             {
@@ -59,6 +66,36 @@ namespace WpfAppPR4.Pages
             AffUser.CurrentUser = null;
             NavigationService.Navigate(new StartPage());
 
+        }
+        private async void LoadFavorites()
+        {
+            try
+            {
+                Debug.WriteLine("Начало загрузки избранного...");
+
+                var favorites = await _apiService.GetFavoriteGamesAsync();
+
+                Debug.WriteLine($"Получено элементов: {favorites?.Count ?? 0}");
+
+                if (favorites != null && favorites.Count > 0)
+                {
+                    foreach (var item in favorites)
+                    {
+                        Debug.WriteLine($"Товар: {item.Name}, Цена: {item.Price}");
+                    }
+
+                    LOVE.ItemsSource = favorites;
+                }
+                else
+                {
+                    MessageBox.Show("Список избранного пуст или API вернул null.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Ошибка: {ex.Message}");
+                MessageBox.Show($"Ошибка загрузки: {ex.Message}\n{ex.InnerException?.Message}");
+            }
         }
     }
 }
