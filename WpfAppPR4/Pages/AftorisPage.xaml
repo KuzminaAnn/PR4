@@ -17,6 +17,7 @@
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <TextBlock Text="Авторизация" FontSize="40" HorizontalAlignment="Center" Grid.Row="0" Margin="5"/>
@@ -33,6 +34,7 @@
             <Button x:Name="Reg" Content="Регистрация" Margin="15, 5" Width="150" Height="30" FontSize="20" Click="Reg_Click"/>
         </StackPanel>
         <Button x:Name="Aff" Content="Авторизация" Margin="15, 5" Width="150" Height="30" FontSize="20" Grid.Row="4" Click="Aff_Click"/>
+        <Button x:Name="Back" Content="На главную" Margin="15, 5" Width="150" Height="30" FontSize="20" Grid.Row="5" Click="Back_Click"/>
         <TextBlock x:Name="StatusTextBlock" Margin="15, 5" Width="150" Height="35" FontSize="20" Grid.Row="5"/>
     </Grid>
 </Page>

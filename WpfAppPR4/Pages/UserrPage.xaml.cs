@@ -26,6 +26,7 @@ namespace WpfAppPR4.Pages
     {
         private readonly ApiService _apiService;
         private int _currentUserId;
+        private List<HistoryOrder> _allOrders = new List<HistoryOrder>();
         public UserrPage()
         {
             InitializeComponent();
@@ -148,14 +149,69 @@ namespace WpfAppPR4.Pages
                 this.NavigationService.Navigate(page);
             }
         }
+        private async void UserProfilePage_Loaded(object sender, RoutedEventArgs e)
+        {
+            await LoadOrderHistory();
+        }
+
         private async Task LoadOrderHistory()
         {
             if (AffUser.CurrentUser == null) return;
 
-            var api = new ApiService();
-            var history = await api.GetUserOrdersAsync(AffUser.CurrentUser.Id);
+            try
+            {
+                var api = new ApiService();
+                var data = await api.GetUserOrdersAsync(AffUser.CurrentUser.Id);
 
-            his.ItemsSource = history;
+                // Если API вернул null, создаем пустой список
+                _allOrders = data ?? new List<HistoryOrder>();
+
+                ApplySorting();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка загрузки: {ex.Message}");
+            }
+        }
+
+        private void ApplySorting()
+        {
+            // 1. Проверка: существует ли ComboBox Sort?
+            if (Sort == null) return;
+
+            // 2. Проверка: есть ли данные?
+            if (_allOrders == null || !_allOrders.Any())
+            {
+                his.ItemsSource = null;
+                return;
+            }
+
+            IEnumerable<HistoryOrder> sortedOrders;
+
+            // 3. Безопасная сортировка
+            // Проверяем SelectedIndex, чтобы избежать ошибок если ничего не выбрано
+            if (Sort.SelectedIndex == 1)
+            {
+                // Сортируем от старых к новым. 
+                // Добавляем проверку на null внутри даты, если вдруг она придет пустой
+                sortedOrders = _allOrders.OrderBy(o => o.Data).ToList();
+            }
+            else
+            {
+                // По умолчанию (или индекс 0): от новых к старым
+                sortedOrders = _allOrders.OrderByDescending(o => o.Data).ToList();
+            }
+
+            his.ItemsSource = sortedOrders;
+        }
+
+        private void Sort_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            // Вызываем сортировку только если страница уже загружена и данные есть
+            if (_allOrders != null && _allOrders.Any())
+            {
+                ApplySorting();
+            }
         }
     }
 }
