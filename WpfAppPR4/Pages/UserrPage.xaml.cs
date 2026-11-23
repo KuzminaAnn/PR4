@@ -31,6 +31,7 @@ namespace WpfAppPR4.Pages
             InitializeComponent();
             _apiService = new ApiService();
             Loaded += async (s, e) => await LoadUserReviews();
+            Loaded += async (s, e) => await LoadOrderHistory();
             _currentUserId = AffUser.CurrentUser.Id;
             if (_apiService._httpClient != null)
             {
@@ -128,6 +129,33 @@ namespace WpfAppPR4.Pages
             {
                 MessageBox.Show($"Исключение: {ex.Message}");
             }
+        }
+
+        private void Basket_Click_1(object sender, RoutedEventArgs e)
+        {
+            NavigationService.Navigate(new BasketPage());
+        }
+
+        private void Podrob_Click(object sender, RoutedEventArgs e)
+        {
+            Button btn = sender as Button;
+            var selectedGame = btn?.DataContext as Product;
+
+            if (selectedGame != null)
+            {
+                var page = new WpfAppPR4.Pages.GamePage();
+                page.SetProduct(selectedGame);
+                this.NavigationService.Navigate(page);
+            }
+        }
+        private async Task LoadOrderHistory()
+        {
+            if (AffUser.CurrentUser == null) return;
+
+            var api = new ApiService();
+            var history = await api.GetUserOrdersAsync(AffUser.CurrentUser.Id);
+
+            his.ItemsSource = history;
         }
     }
 }

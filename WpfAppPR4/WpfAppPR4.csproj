@@ -60,6 +60,7 @@
     </ApplicationDefinition>
     <Compile Include="Models\AdminDto.cs" />
     <Compile Include="Models\FavoriteGame.cs" />
+    <Compile Include="Models\HistoryOrder.cs" />
     <Compile Include="Models\Product.cs" />
     <Compile Include="Models\Review.cs" />
     <Compile Include="Pages\AdminPage.xaml.cs">

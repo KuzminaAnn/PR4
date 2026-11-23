@@ -141,5 +141,21 @@ namespace WpfAppPR4.Services
                 return false;
             }
         }
+        public async Task<List<HistoryOrder>> GetUserOrdersAsync(int userId)
+        {
+            try
+            {
+                var response = await _httpClient.GetAsync($"/api/history/user-orders/{userId}");
+                if (!response.IsSuccessStatusCode) return new List<HistoryOrder>();
+
+                var content = await response.Content.ReadAsStringAsync();
+                return JsonConvert.DeserializeObject<List<HistoryOrder>>(content) ?? new List<HistoryOrder>();
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Ошибка загрузки истории: {ex.Message}");
+                return new List<HistoryOrder>();
+            }
+        }
     }
 }
