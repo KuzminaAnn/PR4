@@ -151,5 +151,9 @@ namespace WpfAppPR4.Pages
                 MessageBox.Show("Ошибка сети: " + ex.Message);
             }
         }
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            NavigationService.GoBack();
+        }
     }
 }

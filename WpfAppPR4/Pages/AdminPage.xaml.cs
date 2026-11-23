@@ -108,5 +108,15 @@ namespace WpfAppPR4.Pages
         {
             NavigationService.Navigate(new AdminCategoriesPage());
         }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            NavigationService.Navigate(new AdminOrdersPage());
+        }
+
+        private void Button_Click_2(object sender, RoutedEventArgs e)
+        {
+            NavigationService.Navigate(new AdminReviewsPage());
+        }
     }
 }

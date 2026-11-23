@@ -36,6 +36,8 @@
         </StackPanel>
         <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right">
             <Button Content="Редактировать категории" Width="250" Height="35" Margin="5, 10" FontSize="20" Click="Button_Click"/>
+            <Button Content="Заказы" Width="140" Height="35" Margin="5, 10" FontSize="20" Click="Button_Click_1"/>
+            <Button Content="Отзывы" Width="140" Height="35" Margin="5, 10" FontSize="20" Click="Button_Click_2"/>
         </StackPanel>
     </Grid>
 </Page>

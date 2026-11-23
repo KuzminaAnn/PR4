@@ -8,7 +8,7 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="AdminCategoriesPage">
 
-    <Grid Margin="20">
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -17,6 +17,12 @@
         </Grid.RowDefinitions>
 
         <TextBlock Grid.Row="0" Text="Управление категориями" FontSize="25" Margin="10" HorizontalAlignment="Center"/>
+
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="10">
+            <TextBlock Text="Название категории:" VerticalAlignment="Center" Margin="5" FontSize="20"/>
+            <TextBox x:Name="CategoryNameBox" Width="300" VerticalAlignment="Center" FontSize="20"/>
+        </StackPanel>
+
 
         <ListBox x:Name="CategoriesListBox" Grid.Row="2" SelectionChanged="CategoriesListBox_SelectionChanged">
             <ListBox.ItemTemplate>
@@ -30,6 +36,7 @@
             <Button Content="Добавить" Width="120" Height="35" Margin="5" Click="AddButton_Click" FontSize="20"/>
             <Button Content="Переименовать" Width="150" Height="35" Margin="5" Click="RenameButton_Click" FontSize="20"/>
             <Button Content="Удалить" Width="120" Height="35" Margin="5" Click="DeleteButton_Click" FontSize="20"/>
+            <Button Content="Назад" Width="120" Height="35" Margin="5" FontSize="20" Click="Button_Click"/>
         </StackPanel>
     </Grid>
 </Page>
