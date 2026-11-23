@@ -19,7 +19,14 @@
         <Button Grid.Row="0" x:Name="Acc" Content="Аккаунт" Visibility="Collapsed" Width="100" Height="30" Click="Acc_Click" HorizontalAlignment="Right"/>
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
             <TextBlock Text="Сортировка:" VerticalAlignment="Center" />
-            <ComboBox x:Name="Sort" Height="30" Width="150" Margin="10"  SelectionChanged="Sort_SelectionChanged" FontSize="20"/>
+            <ComboBox x:Name="Sort" Height="30" Width="150" Margin="10" 
+          SelectionChanged="Sort_SelectionChanged" FontSize="20">
+                <ComboBoxItem Content="По умолчанию"/>
+                <ComboBoxItem Content="Цена: по возрастанию"/>
+                <ComboBoxItem Content="Цена: по убыванию"/>
+                <ComboBoxItem Content="По алфавиту (А-Я)"/>
+                <ComboBoxItem Content="По алфавиту (Я-А)"/>
+            </ComboBox>
             <TextBlock Text="Поиск:" VerticalAlignment="Center"/>
             <TextBox x:Name="Poisc" FontSize="20" Foreground="#1F4E5F" Margin="10" Background="White" Height="30" Width="490" TextChanged="Poisc_TextChanged"/>
             <TextBlock Text="Фильтрация:" VerticalAlignment="Center"/>
