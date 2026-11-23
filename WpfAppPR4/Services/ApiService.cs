@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json;
 using System;
+using System.Text;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -155,6 +156,32 @@ namespace WpfAppPR4.Services
             {
                 System.Diagnostics.Debug.WriteLine($"Ошибка загрузки истории: {ex.Message}");
                 return new List<HistoryOrder>();
+            }
+        }
+        public async Task<bool> AddToFavoritesAsync(int userId, int productId)
+        {
+            try
+            {
+                var url = $"api/FavoriteGame/{userId}/{productId}";
+                var response = await _httpClient.PostAsync(url, null);
+
+                // 200 OK = добавлено успешно
+                // 409 Conflict = уже существует (это тоже нормальный исход для кнопки!)
+                if (response.StatusCode == System.Net.HttpStatusCode.OK ||
+                    response.StatusCode == System.Net.HttpStatusCode.Conflict)
+                {
+                    return true;
+                }
+
+                // Любая другая ошибка (500, 404 и т.д.)
+                var errorContent = await response.Content.ReadAsStringAsync();
+                System.Diagnostics.Debug.WriteLine($"API Error: {errorContent}");
+                return false;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Network Error: {ex.Message}");
+                return false;
             }
         }
     }

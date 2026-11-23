@@ -126,5 +126,36 @@ namespace WebApplicationPR4.Controlers
                 return StatusCode(500, new { message = "Ошибка сервера при удалении", details = ex.Message });
             }
         }
+        // Маршрут: POST api/FavoriteGame/{userId}/{productId}
+        [HttpPost("{userId}/{productId}")]
+        public async Task<IActionResult> AddToFavorites(int userId, int productId)
+        {
+            try
+            {
+                // Проверяем, нет ли уже такой записи (чтобы избежать дубликатов)
+                var exists = await _context.Favorites
+                    .AnyAsync(f => f.Iduser == userId && f.Idproduct == productId);
+
+                if (exists)
+                    return Conflict(new { message = "Уже в избранном" });
+
+                // Создаем новую запись
+                var favorite = new Favorite
+                {
+                    Iduser = userId,
+                    Idproduct = productId
+                };
+
+                _context.Favorites.Add(favorite);
+                await _context.SaveChangesAsync();
+
+                return Ok(new { message = "Добавлено" });
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Ошибка добавления: {ex.Message}");
+                return StatusCode(500, new { error = ex.Message });
+            }
+        }
     }
 }

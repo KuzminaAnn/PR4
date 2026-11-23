@@ -35,6 +35,6 @@
         </StackPanel>
         <Button x:Name="Aff" Content="Авторизация" Margin="15, 5" Width="150" Height="30" FontSize="20" Grid.Row="4" Click="Aff_Click"/>
         <Button x:Name="Back" Content="На главную" Margin="15, 5" Width="150" Height="30" FontSize="20" Grid.Row="5" Click="Back_Click"/>
-        <TextBlock x:Name="StatusTextBlock" Margin="15, 5" Width="150" Height="35" FontSize="20" Grid.Row="5"/>
+        <TextBlock x:Name="StatusTextBlock" Margin="15, 5" Width="150" Height="35" FontSize="20" Grid.Row="6"/>
     </Grid>
 </Page>
