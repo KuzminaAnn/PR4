@@ -9,6 +9,58 @@
       Title="BasketPage">
 
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="Моя корзина" FontSize="25" Margin="5"/>
+
+        <ListBox x:Name="BasketListBox" Grid.Row="1" ScrollViewer.HorizontalScrollBarVisibility="Disabled" d:ItemsSource="{d:SampleData ItemCount=5}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Border BorderBrush="LightGray" BorderThickness="1" Padding="15">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                <TextBlock Text="{Binding ProductName}" FontSize="20"/>
+                                <TextBlock Text="{Binding Price, StringFormat={}{0:C}}" FontSize="15"/>
+                            </StackPanel>
+
+                            <!-- Кнопки +/- и количество -->
+                            <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
+                                <Button Content="-" Width="20" Height="20" FontSize="15"
+                                Click="DecreaseCount_Click" Tag="{Binding Id}"/>
+                                <TextBlock Text="{Binding Count}" FontSize="15"
+                                   VerticalAlignment="Center" Margin="5"/>
+                                <Button Content="+" Width="20" Height="20" FontSize="15"
+                                Click="IncreaseCount_Click" Tag="{Binding Id}"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="2" HorizontalAlignment="Right" Margin="5" VerticalAlignment="Center">
+                                <TextBlock Text="Итого:" FontSize="15"/>
+                                <TextBlock Text="{Binding SumPrice, StringFormat={}{0:C}}" FontSize="20"/>
+                            </StackPanel>
+
+                            <Button Grid.Column="3" Content="Удалить" BorderThickness="0"
+                            Click="RemoveItem_Click" Tag="{Binding Id}"
+                            HorizontalAlignment="Right" VerticalAlignment="Center" Margin="5"/>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        <StackPanel Grid.Row="2" Margin="5" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button x:Name="Back" Content="На главную" FontSize="15" Width="130" Height="40" Click="Back_Click"  Margin="5"/>
+            <Button x:Name="Buy" Content="Заказать" FontSize="15" Width="130" Height="40" Click="Buy_Click"  Margin="5"/>
+            <TextBlock x:Name="TotalSumText" FontSize="22" FontWeight="Bold" HorizontalAlignment="Right"/>
+        </StackPanel>
     </Grid>
 </Page>

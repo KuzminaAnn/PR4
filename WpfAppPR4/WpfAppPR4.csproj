@@ -59,8 +59,11 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Models\AdminDto.cs" />
+    <Compile Include="Models\BasketItemDto.cs" />
+    <Compile Include="Models\Category.cs" />
     <Compile Include="Models\FavoriteGame.cs" />
     <Compile Include="Models\HistoryOrder.cs" />
+    <Compile Include="Models\OrderssModels.cs" />
     <Compile Include="Models\Product.cs" />
     <Compile Include="Pages\AdminCategoriesPage.xaml.cs">
       <DependentUpon>AdminCategoriesPage.xaml</DependentUpon>
@@ -86,6 +89,9 @@
     </Compile>
     <Compile Include="Pages\EditProductPage.xaml.cs">
       <DependentUpon>EditProductPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\OrderssPage.xaml.cs">
+      <DependentUpon>OrderssPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Services\ApiService.cs" />
     <Page Include="Dictionary.xaml">
@@ -134,6 +140,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\EditProductPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\OrderssPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

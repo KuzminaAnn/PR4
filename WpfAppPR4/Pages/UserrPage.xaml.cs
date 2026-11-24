@@ -56,9 +56,44 @@ namespace WpfAppPR4.Pages
             Review.ItemsSource = reviews;
         }
 
-        private void basket_Click(object sender, RoutedEventArgs e)
+        private async void basket_Click(object sender, RoutedEventArgs e)
         {
+            // Проверка авторизации
+            if (AffUser.CurrentUser == null)
+            {
+                MessageBox.Show("Пожалуйста, войдите в аккаунт!");
+                return;
+            }
 
+            // Получаем товар из DataContext кнопки
+            if (sender is Button btn && btn.DataContext is Product product)
+            {
+                // Вызываем API для добавления в корзину
+                bool success = await _apiService.AddToBasketAsync(
+                    AffUser.CurrentUser.Id,
+                    product.Id,
+                    product.Price
+                );
+
+                if (success)
+                {
+                    MessageBox.Show(
+                        $"Игра \"{product.Name}\" добавлена в корзину!",
+                        "Успех",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Information
+                    );
+                }
+                else
+                {
+                    MessageBox.Show(
+                        "Не удалось добавить товар. Проверьте подключение к серверу.",
+                        "Ошибка",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Error
+                    );
+                }
+            }
         }
 
         private void Back_Click(object sender, RoutedEventArgs e)
@@ -211,6 +246,48 @@ namespace WpfAppPR4.Pages
             if (_allOrders != null && _allOrders.Any())
             {
                 ApplySorting();
+            }
+        }
+       
+
+        // ✅ Обработчик кнопки "В корзину"
+        private async void AddToBasket_Click(object sender, RoutedEventArgs e)
+        {
+            // Проверка авторизации
+            if (AffUser.CurrentUser == null)
+            {
+                MessageBox.Show("Пожалуйста, войдите в аккаунт!");
+                return;
+            }
+
+            // Получаем товар из DataContext кнопки
+            if (sender is Button btn && btn.DataContext is Product product)
+            {
+                // Вызываем API для добавления в корзину
+                bool success = await _apiService.AddToBasketAsync(
+                    AffUser.CurrentUser.Id,
+                    product.Id,
+                    product.Price
+                );
+
+                if (success)
+                {
+                    MessageBox.Show(
+                        $"Игра \"{product.Name}\" добавлена в корзину!",
+                        "Успех",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Information
+                    );
+                }
+                else
+                {
+                    MessageBox.Show(
+                        "Не удалось добавить товар. Проверьте подключение к серверу.",
+                        "Ошибка",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Error
+                    );
+                }
             }
         }
     }
