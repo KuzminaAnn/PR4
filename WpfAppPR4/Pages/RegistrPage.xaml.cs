@@ -43,9 +43,16 @@ namespace WpfAppPR4.Pages
             string name = NameTextBox.Text.Trim();
             string login = LoginTextBox.Text.Trim();
             string password = PasswordBox.Password;
+            string passwordConfirm = PasswordConfirmBox.Password;
+
+            if (password != passwordConfirm)
+            {
+                StatusTextBlock.Text = "Пароли не совпадают!";
+                return;
+            }
 
             if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(login) ||
-                string.IsNullOrEmpty(password))
+                string.IsNullOrEmpty(password) || string.IsNullOrEmpty(passwordConfirm))
             {
                 StatusTextBlock.Text = "Заполните все поля!";
                 return;

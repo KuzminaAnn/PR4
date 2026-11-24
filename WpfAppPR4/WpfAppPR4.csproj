@@ -62,6 +62,18 @@
     <Compile Include="Models\FavoriteGame.cs" />
     <Compile Include="Models\HistoryOrder.cs" />
     <Compile Include="Models\Product.cs" />
+    <Compile Include="Pages\AdminCategoriesPage.xaml.cs">
+      <DependentUpon>AdminCategoriesPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\AdminOrdersPage.xaml.cs">
+      <DependentUpon>AdminOrdersPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\AdminPage.xaml.cs">
+      <DependentUpon>AdminPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\AdminReviewsPage.xaml.cs">
+      <DependentUpon>AdminReviewsPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Models\Review.cs" />
     <Compile Include="Pages\AdminPage.xaml.cs">
       <DependentUpon>AdminPage.xaml</DependentUpon>
@@ -92,7 +104,19 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Pages\AdminCategoriesPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\AdminOrdersPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Pages\AdminPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\AdminReviewsPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
