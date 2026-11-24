@@ -33,6 +33,7 @@
             <Button Content="Редактировать" Width="140" Height="35" Margin="5, 10" Click="EditButton_Click" FontSize="20"/>
             <Button Content="Удалить" Width="140" Height="35" Margin="5, 10" Click="DeleteButton_Click" FontSize="20"/>
             <Button Content="Назад" Width="140" Height="35" Margin="5, 10" Click="BackButton_Click" FontSize="20"/>
+            <Button Content="Выйти из аккаунта" Width="200" Height="35" Margin="5, 10" FontSize="20" Click="Button_Click_3"/>
         </StackPanel>
         <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right">
             <Button Content="Редактировать категории" Width="250" Height="35" Margin="5, 10" FontSize="20" Click="Button_Click"/>

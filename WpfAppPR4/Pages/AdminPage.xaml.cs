@@ -118,5 +118,12 @@ namespace WpfAppPR4.Pages
         {
             NavigationService.Navigate(new AdminReviewsPage());
         }
+
+        private void Button_Click_3(object sender, RoutedEventArgs e)
+        {
+            AffUser.CurrentUser = null;
+            MessageBox.Show("Вы вышли из аккаунта");
+            NavigationService.Navigate(new StartPage());
+        }
     }
 }
