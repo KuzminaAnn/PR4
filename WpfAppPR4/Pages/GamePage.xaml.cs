@@ -98,9 +98,59 @@ namespace WpfAppPR4.Pages
                 MessageBox.Show($"Ошибка сети: {ex.Message}");
             }
         }
-        private void Order_Click(object sender, RoutedEventArgs e)
+        private void BuyNow_Click(object sender, RoutedEventArgs e)
         {
+            if (_currentProduct == null) return; // Убедись, что сохранила продукт в поле _currentProduct
 
+            var items = new List<OrderssItemRequest>
+            {
+            new OrderssItemRequest { IdProduct = _currentProduct.Id, Count = 1, ProductName = _currentProduct.Name, Price = (int)_currentProduct.Price }
+            };
+
+            var page = new Pages.OrderssPage(items, (int)_currentProduct.Price);
+            this.NavigationService.Navigate(page);
+        }
+        private async void basket_Click(object sender, RoutedEventArgs e)
+        {
+            // Проверка авторизации
+            if (AffUser.CurrentUser == null)
+            {
+                MessageBox.Show("Пожалуйста, войдите в аккаунт, чтобы добавлять товары в корзину!");
+                return;
+            }
+
+            // Проверка товара
+            if (_currentProduct == null)
+            {
+                MessageBox.Show("Ошибка: товар не выбран.");
+                return;
+            }
+
+            // Вызов API
+            bool success = await _apiService.AddToBasketAsync(
+                AffUser.CurrentUser.Id,
+                _currentProduct.Id,
+                _currentProduct.Price
+            );
+
+            if (success)
+            {
+                MessageBox.Show(
+                    $"Игра \"{_currentProduct.Name}\" добавлена в корзину!",
+                    "Успех",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information
+                );
+            }
+            else
+            {
+                MessageBox.Show(
+                    "Не удалось добавить товар. Проверьте подключение к серверу.",
+                    "Ошибка",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error
+                );
+            }
         }
     }
 }

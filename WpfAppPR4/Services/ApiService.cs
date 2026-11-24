@@ -184,5 +184,162 @@ namespace WpfAppPR4.Services
                 return false;
             }
         }
+        public async Task<List<Category>> GetCategoriesAsync()
+        {
+            try
+            {
+                var response = await _httpClient.GetAsync("/api/products/categories");
+                if (!response.IsSuccessStatusCode) return new List<Category>();
+
+                var content = await response.Content.ReadAsStringAsync();
+                return JsonConvert.DeserializeObject<List<Category>>(content) ?? new List<Category>();
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Ошибка загрузки категорий: {ex.Message}");
+                return new List<Category>();
+            }
+        }
+        public async Task<List<BasketItemDto>> GetUserBasketAsync(int userId)
+        {
+            try
+            {
+                var response = await _httpClient.GetAsync($"/api/products/basket/{userId}");
+
+                if (!response.IsSuccessStatusCode)
+                    return new List<BasketItemDto>();
+
+                var content = await response.Content.ReadAsStringAsync();
+                var basket = JsonConvert.DeserializeObject<List<BasketItemDto>>(content);
+
+                return basket ?? new List<BasketItemDto>();
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Ошибка загрузки корзины: {ex.Message}");
+                return new List<BasketItemDto>();
+            }
+        }
+        // Удаление товара из корзины
+        public async Task<bool> RemoveFromBasketAsync(int basketId)
+        {
+            try
+            {
+                var response = await _httpClient.DeleteAsync($"/api/products/basket/{basketId}");
+                return response.IsSuccessStatusCode;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Ошибка удаления: {ex.Message}");
+                return false;
+            }
+        }
+
+        // Изменение количества товара
+        public async Task<bool> UpdateBasketCountAsync(int basketId, int newCount)
+        {
+            try
+            {
+                var content = new StringContent(newCount.ToString(), Encoding.UTF8, "application/json");
+                var response = await _httpClient.PutAsync($"/api/products/basket/{basketId}/count", content);
+                return response.IsSuccessStatusCode;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Ошибка обновления количества: {ex.Message}");
+                return false;
+            }
+        }
+        public async Task<(bool success, string error)> CreateOrderssAsync(OrderssCreateRequest request)
+        {
+            try
+            {
+                System.Diagnostics.Debug.WriteLine($"Отправляем запрос на создание заказа...");
+                System.Diagnostics.Debug.WriteLine($"JSON: {JsonConvert.SerializeObject(request)}");
+
+                var json = JsonConvert.SerializeObject(request);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                var response = await _httpClient.PostAsync("/api/orderss/create", content);
+
+                var responseContent = await response.Content.ReadAsStringAsync();
+                System.Diagnostics.Debug.WriteLine($"Status: {response.StatusCode}");
+                System.Diagnostics.Debug.WriteLine($"Response: {responseContent}");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return (true, "");
+                }
+                else
+                {
+                    return (false, $"Ошибка {response.StatusCode}: {responseContent}");
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Исключение: {ex.Message}");
+                return (false, $"Исключение: {ex.Message}");
+            }
+        }
+        // Вставь этот метод внутрь класса ApiService
+
+        public async Task<bool> AddToBasketAsync(int userId, int productId, decimal price)
+        {
+            try
+            {
+                System.Diagnostics.Debug.WriteLine($"Добавление в корзину: userId={userId}, productId={productId}, price={price}");
+
+                var requestData = new
+                {
+                    IdUser = userId,
+                    IdProduct = productId,
+                    Count = 1,
+                    SumPrice = (int)price  // Приводим к int, так как в БД SumPrice — int
+                };
+
+                var json = JsonConvert.SerializeObject(requestData);
+                System.Diagnostics.Debug.WriteLine($"JSON: {json}");
+
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                // Путь должен совпадать с маршрутом в контроллере!
+                var response = await _httpClient.PostAsync("/api/products/addtobasket", content);
+
+                var responseContent = await response.Content.ReadAsStringAsync();
+                System.Diagnostics.Debug.WriteLine($"Status: {response.StatusCode}");
+                System.Diagnostics.Debug.WriteLine($"Response: {responseContent}");
+
+                return response.IsSuccessStatusCode;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Исключение в AddToBasketAsync: {ex.Message}");
+                return false;
+            }
+        }
+
+        public async Task<List<OrderssDto>> GetUserOrderssAsync(int userId)
+        {
+            try
+            {
+                var response = await _httpClient.GetAsync($"/api/orderss/user/{userId}");
+                if (!response.IsSuccessStatusCode) return new List<OrderssDto>();
+                var content = await response.Content.ReadAsStringAsync();
+                return JsonConvert.DeserializeObject<List<OrderssDto>>(content) ?? new List<OrderssDto>();
+            }
+            catch { return new List<OrderssDto>(); }
+        }
+
+        public async Task<List<PickupPointDto>> GetPickupPointsAsync()
+        {
+            try
+            {
+                var response = await _httpClient.GetAsync("/api/orderss/pickup-points");
+                if (!response.IsSuccessStatusCode) return new List<PickupPointDto>();
+                var content = await response.Content.ReadAsStringAsync();
+                return JsonConvert.DeserializeObject<List<PickupPointDto>>(content) ?? new List<PickupPointDto>();
+            }
+            catch { return new List<PickupPointDto>(); }
+        }
     }
 }

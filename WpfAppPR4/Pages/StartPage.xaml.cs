@@ -39,6 +39,7 @@ namespace WpfAppPR4.Pages
                 Aff.Visibility = Visibility.Collapsed;
                 Acc.Visibility = Visibility.Visible;
             }
+            LoadData();
         }
         private async Task LoadProducts()
         {        
@@ -121,9 +122,28 @@ namespace WpfAppPR4.Pages
             // Обновляем ListBox
             Box.ItemsSource = filteredList;
         }
-        private void Filtr_SelectionChanged(object sender, RoutedEventArgs e)
+        private void Filtr_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (_originalProducts == null) return;
 
+            var selectedCategory = Filtr.SelectedItem as Category;
+
+            List<Product> filteredList;
+
+            // Если выбрано "Все категории" (Id == 0) или ничего не выбрано
+            if (selectedCategory == null || selectedCategory.Id == 0)
+            {
+                filteredList = new List<Product>(_originalProducts);
+            }
+            else
+            {
+                // Фильтруем по ID категории
+                filteredList = _originalProducts
+                    .Where(p => p.Idcategory == selectedCategory.Id)
+                    .ToList();
+            }
+
+            Box.ItemsSource = filteredList;
         }
         private void Podrob_Click(object sender, RoutedEventArgs e)
         {
@@ -147,6 +167,37 @@ namespace WpfAppPR4.Pages
             
         }
 
+        private async Task LoadData()
+        {
+            // 1. Загружаем данные
+            _originalProducts = await _apiService.GetProductsAsync();
+            var categoriesFromApi = await _apiService.GetCategoriesAsync();
+
+            System.Diagnostics.Debug.WriteLine($"Категорий пришло из API: {categoriesFromApi.Count}");
+
+            // 2. Очищаем комбобокс перед заполнением
+            Filtr.Items.Clear();
+
+            // 3. Добавляем пункт "Все категории" первым
+            Filtr.Items.Add(new Category { Id = 0, Name = "Все категории" });
+
+            // 4. Добавляем остальные категории вручную
+            foreach (var cat in categoriesFromApi)
+            {
+                Filtr.Items.Add(cat);
+            }
+
+            // 5. Выбираем первый элемент по умолчанию
+            if (Filtr.Items.Count > 0)
+            {
+                Filtr.SelectedIndex = 0;
+            }
+
+            // 6. Показываем товары
+            Box.ItemsSource = _originalProducts;
+
+            System.Diagnostics.Debug.WriteLine($"В ComboBox теперь {Filtr.Items.Count} элементов.");
+        }
         private void Acc_Click(object sender, RoutedEventArgs e)
         {
             if (AffUser.CurrentUser.Idrole == 1)

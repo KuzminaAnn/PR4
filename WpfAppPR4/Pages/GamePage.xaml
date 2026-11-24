@@ -26,7 +26,8 @@
             <StackPanel Orientation="Horizontal">
                 <Button x:Name="Back" Content="На главную" HorizontalAlignment="Left" Margin="5" Click="Back_Click"/>
                 <Button x:Name="Love" Content="В избранное" HorizontalAlignment="Left" Margin="5" Click="Love_Click"/>
-                <Button x:Name="Order" Content="В корзину" HorizontalAlignment="Left" Margin="5" Click="Order_Click"/>
+                <Button x:Name="BuyNow" Content="Заказать" HorizontalAlignment="Left" Margin="5" Click="BuyNow_Click"/>
+                <Button x:Name="basket" Content="В корзину" HorizontalAlignment="Left" Margin="5" Click="basket_Click"/>
             </StackPanel>
         </StackPanel>
     </Grid>
