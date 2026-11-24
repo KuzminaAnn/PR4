@@ -103,5 +103,27 @@ namespace WpfAppPR4.Pages
         {
             NavigationService.Navigate(new StartPage());
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            NavigationService.Navigate(new AdminCategoriesPage());
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            NavigationService.Navigate(new AdminOrdersPage());
+        }
+
+        private void Button_Click_2(object sender, RoutedEventArgs e)
+        {
+            NavigationService.Navigate(new AdminReviewsPage());
+        }
+
+        private void Button_Click_3(object sender, RoutedEventArgs e)
+        {
+            AffUser.CurrentUser = null;
+            MessageBox.Show("Вы вышли из аккаунта");
+            NavigationService.Navigate(new StartPage());
+        }
     }
 }
