@@ -23,11 +23,13 @@ namespace WpfAppPR4.Pages
     public partial class StartPage : Page
     {
         private readonly ApiService _apiService;
+        private List<Product> _originalProducts = new List<Product>();
         public StartPage()
         {
             InitializeComponent();
             _apiService = new ApiService();
             Loaded += async (s, e) => await LoadProducts();
+            
             if (AffUser.CurrentUser == null)
             {
                 Aff.Visibility = Visibility.Visible;
@@ -39,11 +41,12 @@ namespace WpfAppPR4.Pages
             }
         }
         private async Task LoadProducts()
-        {
+        {        
             try
             {
                 var products = await _apiService.GetProductsAsync();
                 Box.ItemsSource = products;
+                _originalProducts = products;
             }
             catch (Exception ex)
             {
@@ -54,13 +57,69 @@ namespace WpfAppPR4.Pages
         {
             NavigationService.Navigate(new AftorisPage());
         }
-        private void Sort_SelectionChanged(object sender, RoutedEventArgs e)
+        private void Sort_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            
-        }
-        private void Poisc_TextChanged(object sender, RoutedEventArgs e)
-        {
+            if (_originalProducts == null || !_originalProducts.Any()) return;
 
+            // Получаем выбранный текст из ComboBox
+            var selectedOption = (Sort.SelectedItem as ComboBoxItem)?.Content?.ToString();
+
+            List<Product> sortedList = new List<Product>(_originalProducts); // Создаем копию для сортировки
+
+            switch (selectedOption)
+            {
+                case "Цена: по возрастанию":
+                    sortedList = sortedList.OrderBy(p => p.Price).ToList();
+                    Box.ItemsSource = sortedList;
+                    break;
+
+                case "Цена: по убыванию":
+                    sortedList = sortedList.OrderByDescending(p => p.Price).ToList();
+                    Box.ItemsSource = sortedList;
+                    break;
+
+                case "По алфавиту (А-Я)":
+                    sortedList = sortedList.OrderBy(p => p.Name).ToList();
+                    Box.ItemsSource = sortedList;
+                    break;
+
+                case "По алфавиту (Я-А)":
+                    sortedList = sortedList.OrderByDescending(p => p.Name).ToList();
+                    Box.ItemsSource = sortedList;
+                    break;
+
+                default: // "По умолчанию" или null
+                    sortedList = new List<Product>(_originalProducts);
+                    break;
+            }
+
+            // Обновляем ListBox новым отсортированным списком
+            Box.ItemsSource = sortedList;
+        }
+        private void Poisc_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            // Если список еще не загружен, ничего не делаем
+            if (_originalProducts == null) return;
+
+            string searchText = Poisc.Text.ToLower(); // Приводим к нижнему регистру для удобства
+
+            List<Product> filteredList;
+
+            if (string.IsNullOrWhiteSpace(searchText))
+            {
+                // Если поле пустое, показываем весь список (или текущую отсортированную версию)
+                filteredList = new List<Product>(_originalProducts);
+            }
+            else
+            {
+                // Ищем совпадения по Названию
+                filteredList = _originalProducts.Where(p =>
+                    (p.Name != null && p.Name.ToLower().Contains(searchText))
+                ).ToList();
+            }
+
+            // Обновляем ListBox
+            Box.ItemsSource = filteredList;
         }
         private void Filtr_SelectionChanged(object sender, RoutedEventArgs e)
         {
@@ -68,15 +127,24 @@ namespace WpfAppPR4.Pages
         }
         private void Podrob_Click(object sender, RoutedEventArgs e)
         {
-            Button btn = sender as Button;
-            var selectedGame = btn?.DataContext as Product;
-
-            if (selectedGame != null)
+            if (AffUser.CurrentUser == null)
             {
-                var page = new WpfAppPR4.Pages.GamePage();
-                page.SetProduct(selectedGame);
-                this.NavigationService.Navigate(page);
+                MessageBox.Show("Ага, захотели они товар посмотреть. Авторизуйся или регистрируйся сначала!");
+                NavigationService.Navigate(new AftorisPage());
             }
+            else
+            {
+                Button btn = sender as Button;
+                var selectedGame = btn?.DataContext as Product;
+
+                if (selectedGame != null)
+                {
+                    var page = new WpfAppPR4.Pages.GamePage();
+                    page.SetProduct(selectedGame);
+                    this.NavigationService.Navigate(page);
+                }
+            }
+            
         }
 
         private void Acc_Click(object sender, RoutedEventArgs e)

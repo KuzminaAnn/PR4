@@ -59,6 +59,8 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Models\AdminDto.cs" />
+    <Compile Include="Models\FavoriteGame.cs" />
+    <Compile Include="Models\HistoryOrder.cs" />
     <Compile Include="Models\Product.cs" />
     <Compile Include="Pages\AdminCategoriesPage.xaml.cs">
       <DependentUpon>AdminCategoriesPage.xaml</DependentUpon>
@@ -71,6 +73,10 @@
     </Compile>
     <Compile Include="Pages\AdminReviewsPage.xaml.cs">
       <DependentUpon>AdminReviewsPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Review.cs" />
+    <Compile Include="Pages\AdminPage.xaml.cs">
+      <DependentUpon>AdminPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\BasketPage.xaml.cs">
       <DependentUpon>BasketPage.xaml</DependentUpon>
