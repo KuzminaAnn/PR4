@@ -26,10 +26,22 @@ namespace WpfAppPR4.Pages
     {
         private static readonly HttpClient httpClient = new HttpClient { BaseAddress = new Uri("http://localhost:5225") };
         private List<OrderResponseDto> _orders = new List<OrderResponseDto>();
+        private OrderResponseDto _selectedOrder;
+        public class StatusDto
+        {
+            public int Id { get; set; }
+            public string Name { get; set; } = string.Empty;
+        }
+
+        public class ChangeStatusDto
+        {
+            public int IdStatus { get; set; }
+        }
         public AdminOrdersPage()
         {
             InitializeComponent();
             LoadOrders();
+            LoadStatuses();
         }
         private async void LoadOrders()
         {
@@ -44,11 +56,38 @@ namespace WpfAppPR4.Pages
             {
                 MessageBox.Show("Ошибка загрузки: " + ex.Message);
             }
+
+        }
+        private async void LoadStatuses()
+        {
+            try
+            {
+                var response = await httpClient.GetAsync("/api/order/statuses");
+                var content = await response.Content.ReadAsStringAsync();
+                // Десериализуем как анонимный тип через динамический список
+                var statuses = JsonConvert.DeserializeObject<List<StatusDto>>(content);
+                StatusComboBox.ItemsSource = statuses;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Ошибка загрузки статусов: " + ex.Message);
+            }
         }
 
         private void OrdersListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (!(OrdersListBox.SelectedItem is OrderResponseDto order)) return;
+
+            _selectedOrder = order;
+
+            if (order.Id.HasValue)
+            {
+                StatusComboBox.SelectedValue = order.IdStatus.Value;
+            }
+            else
+            {
+                StatusComboBox.SelectedIndex = -1;
+            }
 
             DetailsPanel.Children.Clear();
 
@@ -98,5 +137,51 @@ namespace WpfAppPR4.Pages
         {
             NavigationService.GoBack();
         }
+
+        private async void ChangeStatusButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (_selectedOrder == null)
+            {
+                MessageBox.Show("Сначала выберите заказ!");
+                return;
+            }
+
+            if (!(StatusComboBox.SelectedValue is int newStatusId))
+            {
+                MessageBox.Show("Выберите новый статус!");
+                return;
+            }
+
+            if (newStatusId == _selectedOrder.IdStatus)
+            {
+                MessageBox.Show("Этот статус уже установлен.");
+                return;
+            }
+
+            try
+            {
+                var requestDto = new ChangeStatusDto { IdStatus = newStatusId };
+                var json = JsonConvert.SerializeObject(requestDto);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                var response = await httpClient.PutAsync($"/api/order/{_selectedOrder.Id}/status", content);
+                var result = JsonConvert.DeserializeObject<OrderResponseDto>(await response.Content.ReadAsStringAsync());
+
+                if (result != null && result.Success)
+                {
+                    MessageBox.Show("Статус успешно изменён!");
+                    LoadOrders(); // перезагружаем список
+                }
+                else
+                {
+                    MessageBox.Show(result?.Message ?? "Ошибка смены статуса");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Ошибка сети: " + ex.Message);
+            }
+        }
     }
+
 }

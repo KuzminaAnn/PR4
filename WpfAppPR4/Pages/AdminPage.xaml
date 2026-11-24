@@ -39,6 +39,7 @@
             <Button Content="Редактировать категории" Width="250" Height="35" Margin="5, 10" FontSize="20" Click="Button_Click"/>
             <Button Content="Заказы" Width="140" Height="35" Margin="5, 10" FontSize="20" Click="Button_Click_1"/>
             <Button Content="Отзывы" Width="140" Height="35" Margin="5, 10" FontSize="20" Click="Button_Click_2"/>
+            <Button Content="ПВЗ" Width="140" Height="35" Margin="5, 10" FontSize="20" Click="Button_Click_5"/>
         </StackPanel>
     </Grid>
 </Page>

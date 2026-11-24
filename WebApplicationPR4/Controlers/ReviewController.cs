@@ -17,17 +17,18 @@ namespace WebApplicationPR4.Controllers
         }
 
         // GET: api/review — все отзывы (для админа)
+        // GET: api/review — все отзывы (для админа)
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            // 1. Получаем все отзывы
+            // 1. Получаем все отзывы из БД (без проекции!)
             var reviews = await _context.Reviews.ToListAsync();
 
             // 2. Собираем уникальные ID пользователей и товаров
             var userIds = reviews.Select(r => r.Iduser).Distinct().ToList();
             var productIds = reviews.Select(r => r.Idproduct).Distinct().ToList();
 
-            // 3. Делаем словари для быстрого поиска имён (чтобы не делать N запросов)
+            // 3. Делаем словари для быстрого поиска имён
             var users = await _context.Users
                 .Where(u => userIds.Contains(u.Id))
                 .ToDictionaryAsync(u => u.Id, u => u.Name);
@@ -36,7 +37,7 @@ namespace WebApplicationPR4.Controllers
                 .Where(p => productIds.Contains(p.Id))
                 .ToDictionaryAsync(p => p.Id, p => p.Name);
 
-            // 4. Формируем ответ
+            // 4. Формируем ответ в памяти (LINQ to Objects, не SQL!)
             var result = reviews.Select(r => new ReviewResponseDto
             {
                 Success = true,

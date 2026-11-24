@@ -2,6 +2,7 @@
 #nullable disable
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WebApplicationPR4.Models;
 
@@ -18,8 +19,11 @@ public partial class Review
     public string Description { get; set; }
 
     public bool IsFreezing { get; set; }
-    public string UserName { get; set; } //собственные
-    public string ProductName { get; set; } //собственные
+    [NotMapped]
+    public string UserName { get; set; }
+
+    [NotMapped]
+    public string ProductName { get; set; }
 
     public virtual Product IdproductNavigation { get; set; }
 

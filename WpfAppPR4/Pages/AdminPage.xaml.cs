@@ -125,5 +125,15 @@ namespace WpfAppPR4.Pages
             MessageBox.Show("Вы вышли из аккаунта");
             NavigationService.Navigate(new StartPage());
         }
+
+        private void Button_Click_4(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Button_Click_5(object sender, RoutedEventArgs e)
+        {
+            NavigationService.Navigate(new AdminPickupPointsPage());
+        }
     }
 }

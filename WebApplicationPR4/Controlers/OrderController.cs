@@ -43,6 +43,7 @@ namespace WebApplicationPR4.Controllers
                 UserId = o.Iduser,
                 UserName = users.ContainsKey(o.Iduser) ? users[o.Iduser] : null,
                 Date = o.Data,
+                IdStatus = o.Idstatus,
                 TotalPrice = o.TotalPrice,
                 StatusName = o.IdstatusNavigation?.Name,
                 DeliveryTypeName = o.IddeliveryTypeNavigation?.Name,
@@ -88,6 +89,7 @@ namespace WebApplicationPR4.Controllers
                 UserName = user?.Name,
                 Date = order.Data,
                 TotalPrice = order.TotalPrice,
+                IdStatus = order.Idstatus,
                 StatusName = order.IdstatusNavigation?.Name,
                 DeliveryTypeName = order.IddeliveryTypeNavigation?.Name,
                 Address = order.Address,
@@ -102,6 +104,34 @@ namespace WebApplicationPR4.Controllers
                     SumPrice = po.SumPrice
                 }).ToList()
             });
+        }
+        [HttpGet("statuses")]
+        public async Task<IActionResult> GetStatuses()
+        {
+            var statuses = await _context.Statuses
+                .Select(s => new { Id = s.Id, Name = s.Name })
+                .ToListAsync();
+
+            return Ok(statuses);
+        }
+
+        // PUT: api/order/5/status — сменить статус заказа
+        [HttpPut("{id}/status")]
+        public async Task<IActionResult> ChangeStatus(int id, [FromBody] ChangeStatusDto request)
+        {
+            var order = await _context.Orders.FindAsync(id);
+            if (order == null)
+                return NotFound(new OrderResponseDto { Success = false, Message = "Заказ не найден" });
+
+            // Проверяем, что такой статус существует
+            var statusExists = await _context.Statuses.AnyAsync(s => s.Id == request.IdStatus);
+            if (!statusExists)
+                return BadRequest(new OrderResponseDto { Success = false, Message = "Неверный статус" });
+
+            order.Idstatus = request.IdStatus;
+            await _context.SaveChangesAsync();
+
+            return Ok(new OrderResponseDto { Success = true, Message = "Статус изменён" });
         }
     }
 }

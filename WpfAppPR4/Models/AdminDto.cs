@@ -62,6 +62,7 @@ namespace WpfAppPR4.Models
         public string UserName { get; set; } = string.Empty;
         public string Date { get; set; } = string.Empty;
         public int? TotalPrice { get; set; }
+        public int? IdStatus { get; set; }
         public string StatusName { get; set; } = string.Empty;
         public string DeliveryTypeName { get; set; } = string.Empty;
         public string Address { get; set; } = string.Empty;
@@ -81,5 +82,4 @@ namespace WpfAppPR4.Models
         public float Rating { get; set; }
         public string Description { get; set; } = string.Empty;
     }
-
 }

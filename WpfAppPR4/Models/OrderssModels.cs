@@ -45,7 +45,9 @@ namespace WpfAppPR4.Models
 
     public class PickupPointDto
     {
+        public bool Success { get; set; }
+        public string Message { get; set; } = string.Empty;
         public int Id { get; set; }
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
     }
 }

@@ -13,6 +13,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="350"/>
@@ -42,6 +43,11 @@
                 </StackPanel>
             </ScrollViewer>
         </Border>
-        <Button Content="Назад" Width="120" Height="35" Margin="5" FontSize="20" Click="Button_Click" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Right"/>
+        <StackPanel Grid.Row="2" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
+            <TextBlock Text="Новый статус:" VerticalAlignment="Center" Margin="10" FontSize="20"/>
+            <ComboBox x:Name="StatusComboBox" Width="200" DisplayMemberPath="Name" SelectedValuePath="Id" VerticalAlignment="Center" Margin="10" FontSize="20"/>
+            <Button Content="Сменить статус" Width="160" Height="35" FontSize="20" Click="ChangeStatusButton_Click"/>
+        </StackPanel>
+        <Button Content="Назад" Width="120" Height="35" Margin="5" FontSize="20" Click="Button_Click" Grid.Row="3" Grid.Column="1" HorizontalAlignment="Right"/>
     </Grid>
 </Page>
