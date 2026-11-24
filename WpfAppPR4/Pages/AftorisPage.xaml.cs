@@ -103,5 +103,10 @@ namespace WpfAppPR4.Pages
                 StatusTextBlock.Text = "Ошибка сети: " + ex.Message;
             }
         }
+
+        private void Back_Click(object sender, RoutedEventArgs e)
+        {
+            NavigationService.Navigate(new StartPage());
+        }
     }
 }

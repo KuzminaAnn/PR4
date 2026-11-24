@@ -18,6 +18,8 @@ public partial class Review
     public string Description { get; set; }
 
     public bool IsFreezing { get; set; }
+    public string UserName { get; set; } //собственные
+    public string ProductName { get; set; } //собственные
 
     public virtual Product IdproductNavigation { get; set; }
 
