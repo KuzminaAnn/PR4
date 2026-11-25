@@ -127,23 +127,37 @@ namespace WebApplicationPR4.Controlers
             return Ok(new { message = "Товар добавлен в корзину" });
         }
         //отображение отзывов
-        [HttpGet("reviews/{productId}")]
-        public async Task<ActionResult<List<ProductReviewDto>>> GetProductReviews(int productId)
+        [HttpPost("reviews")]
+        public async Task<IActionResult> CreateReview([FromBody] ReviewRequest request) // ✅ Используем DTO из тела запроса
         {
-            var reviews = await (
-                from r in _context.Reviews
-                join u in _context.Users on r.Iduser equals u.Id // Явное соединение вместо Include
-                where r.Idproduct == productId
-                select new ProductReviewDto
-                {
-                    Id = r.Id,
-                    UserName = u.Name != null ? u.Name : "Аноним",
-                    Rating = r.Rating,
-                    Text = r.Description, // Проверь название поля!
-                }
-            ).ToListAsync();
+            if (request == null)
+                return BadRequest("Пустой запрос");
 
-            return Ok(reviews);
+            // ✅ Берем ID товара ИЗ объекта request, а не из несуществующей переменной productId
+            int productId = request.Idproduct;
+
+            // Проверка на валидность ID
+            if (productId <= 0)
+                return BadRequest("Некорректный ID товара");
+
+            // Ищем товар в базе
+            var product = await _context.Products.FindAsync(productId);
+            if (product == null)
+                return NotFound($"Товар с ID {productId} не найден");
+
+            // Создаем отзыв
+            var review = new WebApplicationPR4.Models.Review
+            {
+                Iduser = request.Iduser,
+                Idproduct = productId,
+                Rating = request.Rating,
+                Description = request.Description
+            };
+
+            _context.Reviews.Add(review);
+            await _context.SaveChangesAsync();
+
+            return Ok(new { message = "Отзыв успешно добавлен" });
         }
     }
 }

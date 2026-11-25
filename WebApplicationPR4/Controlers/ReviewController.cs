@@ -65,5 +65,24 @@ namespace WebApplicationPR4.Controllers
 
             return Ok(new ReviewResponseDto { Success = true, Message = "Отзыв удалён" });
         }
+        [HttpPost("add")]
+        public async Task<IActionResult> AddReview([FromBody] WebApplicationPR4.DTO.Review request)
+        {
+            if (request == null) return BadRequest();
+
+            // Создаем новую запись в таблице Reviews
+            var review = new WebApplicationPR4.Models.Review // Убедись, что класс называется так же, как твоя таблица в БД
+            {
+                Iduser = request.Iduser,
+                Idproduct = request.Idproduct,
+                Description = request.Description,
+                Rating = request.Rating
+            };
+
+            _context.Reviews.Add(review);
+            await _context.SaveChangesAsync();
+
+            return Ok(new { message = "Отзыв добавлен" });
+        }
     }
 }

@@ -102,6 +102,7 @@ namespace WebApplicationPR4.Controllers
                     SumPrice = po.SumPrice
                 }).ToList()
             });
+       
         }
     }
 }

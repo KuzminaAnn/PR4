@@ -79,12 +79,14 @@
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel Width="700">
+                                    <TextBlock Text="{Binding IdProduct}" Margin="5"/>
                                     <TextBlock Text="{Binding Name}" Margin="5"/>
                                     <TextBlock Text="{Binding Count}" Margin="5"/>
                                     <TextBlock Text="{Binding Price}" Margin="5"/>
                                     <TextBlock Text="{Binding SumPrice}" Margin="5"/>
                                     <TextBlock Text="{Binding Data}" Margin="5"/>
                                     <Button x:Name="Podrob" Content="Подробнее" HorizontalAlignment="Left" Click="Podrob_Click" Margin="5"/>
+                                    <Button x:Name="LeaveReview" Content="Оставить отзыв" Width="130" Click="LeaveReview_Click" Tag="{Binding IdProduct}" HorizontalAlignment="Left" Margin="5"/>
                                 </StackPanel>
                             </DataTemplate>
                         </ListBox.ItemTemplate>

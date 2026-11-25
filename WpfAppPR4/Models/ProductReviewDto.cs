@@ -9,6 +9,7 @@ namespace WpfAppPR4.Models
     public class ProductReviewDto
     {
         public int Id { get; set; }
+        public int IdProduct { get; set; }
         public string UserName { get; set; }
         public double Rating { get; set; }
         public string Text { get; set; }

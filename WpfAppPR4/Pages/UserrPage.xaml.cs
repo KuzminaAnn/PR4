@@ -253,5 +253,26 @@ namespace WpfAppPR4.Pages
                 ApplySorting();
             }
         }
+        private void LeaveReview_Click(object sender, RoutedEventArgs e)
+        {
+            // Проверяем, что кнопка существует и в Tag лежит ID продукта
+            if (sender is Button btn && btn.Tag is int productId)
+            {
+                if (AffUser.CurrentUser == null)
+                {
+                    MessageBox.Show("Для оставления отзыва необходимо войти в систему.");
+                    return;
+                }
+
+                // Создаем страницу отзыва
+                var reviewPage = new WpfAppPR4.Pages.CreateReview();
+
+                // Передаем данные: ID пользователя и ID товара
+                reviewPage.SetReviewData(AffUser.CurrentUser.Id, productId);
+
+                // Переходим на страницу (предполагаем, что ты используешь NavigationService)
+                this.NavigationService.Navigate(reviewPage);
+            }
+        }
     }
 }
