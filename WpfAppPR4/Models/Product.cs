@@ -27,5 +27,6 @@ namespace WpfAppPR4.Models
 
         [JsonProperty("description")]
         public string Description { get; set; }
+        public int Idcategory { get; set; }
     }
 }
