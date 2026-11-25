@@ -56,7 +56,7 @@
                                 <TextBlock Text="{Binding Name}" Margin="5"/>
                                 <TextBlock Text="{Binding Rating}" Margin="5"/>
                                 <TextBlock Text="{Binding Price}" Margin="5"/>
-                                <Button x:Name="basket" Content="В корзину" HorizontalAlignment="Left" Click="basket_Click" Margin="5"/>
+                                <Button x:Name="basket" Content="В корзину" HorizontalAlignment="Left" Click="AddToBasket_Click" Margin="5"/>
                                 <Button x:Name="delete" Content="Убрать" HorizontalAlignment="Left" Click="delete_Click" Margin="5" CommandParameter="{Binding}"/>
                             </StackPanel>
                         </DataTemplate>
