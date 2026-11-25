@@ -30,5 +30,30 @@
                 <Button x:Name="basket" Content="В корзину" HorizontalAlignment="Left" Margin="5" Click="basket_Click"/>
             </StackPanel>
         </StackPanel>
+        <!-- После блока с ценой/рейтингом -->
+        <StackPanel Margin="5" Grid.Row="2">
+            <TextBlock Text="Отзывы покупателей:" FontSize="20" Margin="5"/>
+
+            <ItemsControl x:Name="ReviewsList">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border BorderThickness="1" Padding="15" CornerRadius="5">
+                            <StackPanel>
+                                <!-- Имя и рейтинг -->
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding UserName}" FontSize="16"/>
+                                    <TextBlock Text=" ★ " FontSize="16"/>
+                                    <TextBlock Text="{Binding Rating}" FontSize="16"/>
+                                    <TextBlock Text="{Binding Date, StringFormat={}{0:dd.MM.yyyy}}" Margin="5" FontSize="15"/>
+                                </StackPanel>
+
+                                <!-- Текст отзыва -->
+                                <TextBlock Text="{Binding Text}" TextWrapping="Wrap" Margin="5" FontSize="15"/>
+                            </StackPanel>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </StackPanel>
     </Grid>
 </Page>

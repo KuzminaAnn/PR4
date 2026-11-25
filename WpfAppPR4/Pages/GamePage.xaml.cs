@@ -30,7 +30,7 @@ namespace WpfAppPR4.Pages
             InitializeComponent();
             _apiService = new ApiService();
         }
-        public void SetProduct(Product product)
+        public async void SetProduct(Product product)
         {
             System.Diagnostics.Debug.WriteLine($"[DEBUG] SetProduct вызван. Product is null: {product == null}");
 
@@ -49,6 +49,9 @@ namespace WpfAppPR4.Pages
             PriceText.Text = $"{product.Price} руб.";
             RatingText.Text = product.Rating.ToString("F1");
             GameImage.Source = new System.Windows.Media.Imaging.BitmapImage(new Uri(product.Image, UriKind.RelativeOrAbsolute));
+
+            var reviews = await _apiService.GetProductReviewsAsync(product.Id);
+            ReviewsList.ItemsSource = reviews;
         }
 
         private void Back_Click(object sender, RoutedEventArgs e)

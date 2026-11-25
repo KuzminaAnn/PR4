@@ -341,5 +341,21 @@ namespace WpfAppPR4.Services
             }
             catch { return new List<PickupPointDto>(); }
         }
+        public async Task<List<ProductReviewDto>> GetProductReviewsAsync(int productId)
+        {
+            try
+            {
+                var response = await _httpClient.GetAsync($"/api/products/reviews/{productId}");
+                if (!response.IsSuccessStatusCode) return new List<ProductReviewDto>();
+
+                var content = await response.Content.ReadAsStringAsync();
+                return JsonConvert.DeserializeObject<List<ProductReviewDto>>(content) ?? new List<ProductReviewDto>();
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Ошибка загрузки отзывов: {ex.Message}");
+                return new List<ProductReviewDto>();
+            }
+        }
     }
 }

@@ -126,5 +126,24 @@ namespace WebApplicationPR4.Controlers
 
             return Ok(new { message = "Товар добавлен в корзину" });
         }
+        //отображение отзывов
+        [HttpGet("reviews/{productId}")]
+        public async Task<ActionResult<List<ProductReviewDto>>> GetProductReviews(int productId)
+        {
+            var reviews = await (
+                from r in _context.Reviews
+                join u in _context.Users on r.Iduser equals u.Id // Явное соединение вместо Include
+                where r.Idproduct == productId
+                select new ProductReviewDto
+                {
+                    Id = r.Id,
+                    UserName = u.Name != null ? u.Name : "Аноним",
+                    Rating = r.Rating,
+                    Text = r.Description, // Проверь название поля!
+                }
+            ).ToListAsync();
+
+            return Ok(reviews);
+        }
     }
 }

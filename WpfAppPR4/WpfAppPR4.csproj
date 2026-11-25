@@ -65,6 +65,7 @@
     <Compile Include="Models\HistoryOrder.cs" />
     <Compile Include="Models\OrderssModels.cs" />
     <Compile Include="Models\Product.cs" />
+    <Compile Include="Models\ProductReviewDto.cs" />
     <Compile Include="Pages\AdminCategoriesPage.xaml.cs">
       <DependentUpon>AdminCategoriesPage.xaml</DependentUpon>
     </Compile>
