@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Azure.Core;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebApplicationPR4.DTO;
 using WebApplicationPR4.Models;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace WebApplicationPR4.Controlers
 {
@@ -74,7 +76,7 @@ namespace WebApplicationPR4.Controlers
         {
             var orders = await _context.Orders
                 .Where(o => o.Iduser == userId)
-                .Include(o => o.ProductOrders).ThenInclude(po => po.IdproductNavigation) // Подтягиваем товары
+                //.Include(o => o.ProductOrders).ThenInclude(po => po.IdproductNavigation)
                 .Include(o => o.IddeliveryTypeNavigation)
                 .Include(o => o.IdpickupPointNavigation)
                 .Include(o => o.IdstatusNavigation)
@@ -88,11 +90,14 @@ namespace WebApplicationPR4.Controlers
                     Address = o.Address,
                     PickupPointName = o.IdpickupPointNavigation != null ? o.IdpickupPointNavigation.Name : "",
                     StatusName = o.IdstatusNavigation != null ? o.IdstatusNavigation.Name : "",
+
                     Items = o.ProductOrders.Select(po => new OrderssItemDto
                     {
                         ProductName = po.IdproductNavigation != null ? po.IdproductNavigation.Name : "Товар",
                         Count = po.Count,
-                        Price = po.Price
+                        Price = po.Price,
+
+                        IdProduct = po.Idproduct
                     }).ToList()
                 }).ToListAsync();
 
@@ -103,6 +108,52 @@ namespace WebApplicationPR4.Controlers
         public async Task<ActionResult<List<PickupPoint>>> GetPickupPoints()
         {
             return Ok(await _context.PickupPoints.ToListAsync());
+        }
+        // В конце класса OrderssController
+
+        // В OrderssController.cs
+
+        [HttpPost("add-review")]
+        public async Task<IActionResult> AddReview([FromBody] ReviewRequestDto request)
+        {
+            if (request == null)
+                return BadRequest("Данные пусты");
+
+            try
+            {
+                // Проверка существования пользователя и товара
+                var userExists = await _context.Users.AnyAsync(u => u.Id == request.IdUser);
+                var productExists = await _context.Products.AnyAsync(p => p.Id == request.IdProduct);
+
+                if (!userExists || !productExists)
+                    return BadRequest("Пользователь или товар не найдены.");
+
+                // Создаем объект отзыва ТОЛЬКО с реальными колонками из БД
+                var review = new WebApplicationPR4.Models.Review
+                {
+                    Iduser = request.IdUser,       // Реальная колонка
+                    Idproduct = request.IdProduct, // Реальная колонка
+                    Description = request.Text ?? "", // Реальная колонка (текст отзыва)
+                    Rating = request.Rating,       // Реальная колонка
+                    IsFreezing = false             // Реальная колонка
+
+                    // ВАЖНО: НЕ заполняй UserName и ProductName здесь!
+                    // Они будут подгружаться через Join/Include при чтении, а не при записи.
+                };
+
+                _context.Reviews.Add(review);
+                await _context.SaveChangesAsync();
+
+                return Ok(new { message = "Отзыв успешно добавлен" });
+            }
+            catch (Exception ex)
+            {
+                string errorMsg = ex.Message;
+                if (ex.InnerException != null)
+                    errorMsg += $" | Inner: {ex.InnerException.Message}";
+
+                return StatusCode(500, errorMsg);
+            }
         }
     }
 }

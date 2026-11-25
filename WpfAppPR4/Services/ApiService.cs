@@ -1,9 +1,10 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json;
 using System;
-using System.Text;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using WpfAppPR4.Models;
@@ -142,11 +143,14 @@ namespace WpfAppPR4.Services
                 return false;
             }
         }
+        // WpfAppPR4/Services/ApiService.cs
         public async Task<List<HistoryOrder>> GetUserOrdersAsync(int userId)
         {
             try
             {
+                // Путь должен вести к новому методу, который возвращает плоский список
                 var response = await _httpClient.GetAsync($"/api/history/user-orders/{userId}");
+
                 if (!response.IsSuccessStatusCode) return new List<HistoryOrder>();
 
                 var content = await response.Content.ReadAsStringAsync();
@@ -340,6 +344,153 @@ namespace WpfAppPR4.Services
                 return JsonConvert.DeserializeObject<List<PickupPointDto>>(content) ?? new List<PickupPointDto>();
             }
             catch { return new List<PickupPointDto>(); }
+        }
+        public async Task<List<ProductReviewDto>> GetProductReviewsAsync(int productId)
+        {
+            try
+            {
+                var response = await _httpClient.GetAsync($"/api/products/reviews/{productId}");
+                if (!response.IsSuccessStatusCode) return new List<ProductReviewDto>();
+
+                var content = await response.Content.ReadAsStringAsync();
+                return JsonConvert.DeserializeObject<List<ProductReviewDto>>(content) ?? new List<ProductReviewDto>();
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Ошибка загрузки отзывов: {ex.Message}");
+                return new List<ProductReviewDto>();
+            }
+        }
+        public async Task<bool> PostReviewAsync(object reviewData)
+        {
+            try
+            {
+                System.Diagnostics.Debug.WriteLine("=== НАЧАЛО ОТПРАВКИ ОТЗЫВА ===");
+
+                var json = JsonConvert.SerializeObject(reviewData);
+                System.Diagnostics.Debug.WriteLine($"📤 Отправляемый JSON: {json}");
+
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                // ⚠️ ВАЖНО: Проверь, совпадает ли этот путь с атрибутом [HttpPost] в контроллере!
+                string apiUrl = "/api/products/reviews";
+                System.Diagnostics.Debug.WriteLine($"🌐 URL запроса: {apiUrl}");
+
+                var response = await _httpClient.PostAsync(apiUrl, content);
+
+                var responseBody = await response.Content.ReadAsStringAsync();
+                System.Diagnostics.Debug.WriteLine($"📥 Статус ответа: {(int)response.StatusCode} ({response.StatusCode})");
+                System.Diagnostics.Debug.WriteLine($"📥 Тело ответа: {responseBody}");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    System.Diagnostics.Debug.WriteLine("✅ Отзыв успешно отправлен!");
+                    return true;
+                }
+                else
+                {
+                    System.Diagnostics.Debug.WriteLine("❌ Сервер вернул ошибку.");
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"💥 ИСКЛЮЧЕНИЕ В КЛИЕНТЕ: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine(ex.StackTrace);
+                return false;
+            }
+        }
+
+        // Новый метод: получает все заказы и "вытаскивает" из них список товаров с ID
+        public async Task<List<HistoryOrder>> GetUserOrderItemsAsync(int userId)
+        {
+            try
+            {
+                // 1. Получаем список заказов (используем уже существующий метод)
+                var orders = await GetUserOrderssAsync(userId);
+
+                if (orders == null || !orders.Any())
+                    return new List<HistoryOrder>();
+
+                // 2. Превращаем список заказов в плоский список товаров
+                var historyItems = new List<HistoryOrder>();
+
+                foreach (var order in orders)
+                {
+                    if (order.Items != null)
+                    {
+                        foreach (var item in order.Items)
+                        {
+                            historyItems.Add(new HistoryOrder
+                            {
+                                Name = item.ProductName,
+                                Count = item.Count,
+                                Price = item.Price,           // Цена за штуку из DTO
+                                SumPrice = item.Price * item.Count, // Или item.SumPrice, если есть в DTO
+                                Data = order.Data,            // Берём дату из родительского заказа
+                                IdProduct = item.IdProduct    // ✅ Передаём ID товара!
+                            });
+                        }
+                    }
+                }
+
+                // Сортируем по дате (новые сверху)
+                return historyItems.OrderByDescending(h => h.Data).ToList();
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Ошибка загрузки истории товаров: {ex.Message}");
+                return new List<HistoryOrder>();
+            }
+        }
+        // Метод для получения одного товара по ID (для отображения названия)
+        public async Task<Product> GetProductByIdAsync(int productId)
+        {
+            try
+            {
+                var response = await _httpClient.GetAsync($"/api/products/{productId}"); // Убедись, что такой маршрут есть в API
+                if (!response.IsSuccessStatusCode) return null;
+
+                var content = await response.Content.ReadAsStringAsync();
+                return JsonConvert.DeserializeObject<Product>(content);
+            }
+            catch { return null; }
+        }
+
+        // Метод для отправки отзыва
+        // WpfAppPR4/Services/ApiService.cs
+        public async Task<bool> AddReviewAsync(int userId, int productId, string text, int rating)
+        {
+            try
+            {
+                var reviewData = new
+                {
+                    IdUser = userId,
+                    IdProduct = productId,
+                    Text = text,
+                    Rating = rating
+                };
+
+                var json = JsonConvert.SerializeObject(reviewData);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                // Путь: /api/orderss/add-review
+                var response = await _httpClient.PostAsync("/api/orderss/add-review", content);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    var errorContent = await response.Content.ReadAsStringAsync();
+                    System.Diagnostics.Debug.WriteLine($"ОШИБКА СЕРВЕРА: {errorContent}");
+                    throw new Exception(errorContent);
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"КРИТИЧЕСКАЯ ОШИБКА: {ex.Message}");
+                return false;
+            }
         }
     }
 }
