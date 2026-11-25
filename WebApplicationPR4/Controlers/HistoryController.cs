@@ -16,40 +16,36 @@ namespace WebApplicationPR4.Controlers
             _context = context;
         }
         [HttpGet("user-orders/{userId}")]
-        public async Task<ActionResult<List<OrderHistoryDto>>> GetUserOrders(int userId)
+        public async Task<ActionResult<List<OrderHistoryDto>>> GetUserOrdersForList(int userId)
         {
-
-            var userOrders = await _context.Orders
+            // Получаем все заказы пользователя
+            var orders = await _context.Orders
                 .Where(o => o.Iduser == userId)
                 .ToListAsync();
 
-            if (!userOrders.Any())
-                return Ok(new List<OrderHistoryDto>());
+            if (!orders.Any()) return Ok(new List<OrderHistoryDto>());
 
-            var orderIds = userOrders.Select(o => o.Id).ToList();
+            var orderIds = orders.Select(o => o.Id).ToList();
 
+            // Получаем все позиции товаров из этих заказов
             var positions = await _context.ProductOrders
                 .Where(po => orderIds.Contains(po.Idorder))
+                .Include(po => po.IdproductNavigation) // Подгружаем название товара
                 .ToListAsync();
 
-            if (!positions.Any())
-                return Ok(new List<OrderHistoryDto>());
+            // Создаем словарь дат заказов для быстрого доступа
+            var dateDict = orders.ToDictionary(o => o.Id, o => o.Data);
 
-            var productIds = positions.Select(p => p.Idproduct).Distinct().ToList();
-
-            var productsDict = await _context.Products
-                .Where(p => productIds.Contains(p.Id))
-                .ToDictionaryAsync(p => p.Id, p => p.Name);
-
-            var ordersDict = userOrders.ToDictionary(o => o.Id, o => o.Data);
-
+            // Формируем плоский список DTO
             var result = positions.Select(po => new OrderHistoryDto
             {
-                Name = productsDict.TryGetValue(po.Idproduct, out var name) ? name : "Товар удален",
+                IdProduct = po.Idproduct,
+                Name = po.IdproductNavigation != null ? po.IdproductNavigation.Name : "Товар",
                 Count = po.Count,
                 Price = po.Price,
                 SumPrice = po.SumPrice,
-                Data = ordersDict.TryGetValue(po.Idorder, out var date) ? date.ToDateTime(TimeOnly.MinValue) : DateTime.MinValue
+                // Преобразуем DateOnly в DateTime, если нужно
+                Data = dateDict.TryGetValue(po.Idorder, out var date) ? date.ToDateTime(TimeOnly.MinValue) : DateTime.MinValue
             }).ToList();
 
             return Ok(result);

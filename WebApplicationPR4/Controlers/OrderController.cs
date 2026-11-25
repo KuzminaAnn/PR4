@@ -104,6 +104,7 @@ namespace WebApplicationPR4.Controllers
                     SumPrice = po.SumPrice
                 }).ToList()
             });
+       
         }
         [HttpGet("statuses")]
         public async Task<IActionResult> GetStatuses()

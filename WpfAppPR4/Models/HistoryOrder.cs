@@ -8,10 +8,13 @@ namespace WpfAppPR4.Models
 {
     public class HistoryOrder
     {
+        public int IdOrder { get; set; } 
+        public int IdProduct { get; set; }
         public string Name { get; set; }
         public int Count { get; set; }
         public int Price { get; set; }
         public int SumPrice { get; set; }
         public DateTime Data { get; set; }
+        public string IdStatus { get; set; }
     }
 }
